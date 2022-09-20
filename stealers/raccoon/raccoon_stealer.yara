@@ -8,6 +8,9 @@ rule raccoon_stealer {
     version="1.0"
     phase = "experimental"
     url = "https://d01a.github.io/raccoon-stealer/#iocs"
+    references = "https://www.zscaler.com/blogs/security-research/raccoon-stealer-v2-latest-generation-raccoon-family"
+    credits = "@0xd01a"
+    malware = "Win32.PWS.Raccoon"
   strings:
     $s1 = "ffcookies.txt" wide ascii nocase
     $s2 = "wallet.dat" wide ascii nocase
