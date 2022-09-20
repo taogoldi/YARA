@@ -1,7 +1,7 @@
 import "pe"
 rule raccoon_stealer {
   meta:
-    description = ""
+    description = "Detect variants of Raccoon Stealer v2"
     author = "Yakov Goldberg"
     date = "2022-09-20"
     hash1 = "022432f770bf0e7c5260100fcde2ec7c49f68716751fd7d8b9e113bf06167e03"
