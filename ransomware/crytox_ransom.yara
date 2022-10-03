@@ -2,7 +2,7 @@ import "pe"
 rule crytox_ransomware {
   meta:
     description = "Detect variants of Crytox Ransomware"
-    author = "Jake Goldi"
+    author = "Jake Goldi @ubersec"
     date = "2022-09-29"
     packed_hash1 = "32eef267a1192a9a739ccaaae0266bc66707bb64768a764541ecb039a50cba67"
     hash2 = "11ea0d7e0ebe15b8147d39e72773221d11c2cf84e2d8d6164102c65e797eef6d"
