@@ -1,4 +1,3 @@
-import "pe"
 rule raccoon_stealer {
   meta:
     description = "Detect variants of Raccoon Stealer v2"
