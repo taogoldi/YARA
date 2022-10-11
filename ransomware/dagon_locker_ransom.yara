@@ -3,7 +3,7 @@ rule dagon_locker_ransomware {
   meta:
     description = "Detect Dagon Locker Ransomware"
     author = "Jake Goldi @ubersec"
-    date = "2022-10-09"
+    date = "2022-11-09"
     hash1 = "a0fef8b9c275d11c2922db9f0bf0d696f4a8598de488c26d62313540eb22b470"
     hash2 = "c70aa87fbbcc8e6e5d9c8272c4783d35ba607b07cc5e93e12dc4d0132bd84ef0"
     version="1.0"
@@ -73,6 +73,48 @@ strings:
     */
     
     $op1 = {8b45284189f14189d04889c2b900000000488b05???f0?00ffd0488945f048837df0007507b800000000eb}
+
+    /*
+        Hash 1: a0fef8b9c275d11c2922db9f0bf0d696f4a8598de488c26d62313540eb22b470
+        48 C7 45 A0 00 00 00 00                 mov     [rbp+0A10h+var_A70], 0
+        C7 45 A8 01 00 00 00                    mov     [rbp+0A10h+var_A68], 1
+        8B 85 F8 09 00 00                       mov     eax, [rbp+0A10h+var_18]
+        89 C2                                   mov     edx, eax        ; unsigned int
+        48 8D 0D 46 49 01 00                    lea     rcx, _data      ; unsigned __int8 *
+        E8 11 FE FF FF                          call    mw_mem_buff_allocation_key_xor
+        48 89 45 B0                             mov     [rbp+0A10h+var_A60], rax
+        8B 95 FC 09 00 00                       mov     edx, [rbp+0A10h+buff_size] ; unsigned int
+        48 8D 45 C0                             lea     rax, [rbp+0A10h+array_buff]
+        48 89 C1                                mov     rcx, rax        ; unsigned __int8 *
+        E8 FB FD FF FF                          call    mw_mem_buff_allocation_key_xor
+        48 89 85 F0 09 00 00                    mov     [rbp+0A10h+var_20], rax
+        48 8B 85 F0 09 00 00                    mov     rax, [rbp+0A10h+var_20]
+        48 8D 55 A0                             lea     rdx, [rbp+0A10h+var_A70]
+        48 89 D1                                mov     rcx, rdx
+        FF D0                                   call    rax
+
+        Hash 2: c70aa87fbbcc8e6e5d9c8272c4783d35ba607b07cc5e93e12dc4d0132bd84ef0 
+        48 C7 45 A0 00 00 00 00                 mov     [rbp+0A10h+var_A70], 0
+        C7 45 A8 01 00 00 00                    mov     [rbp+0A10h+var_A68], 1
+        8B 85 F8 09 00 00                       mov     eax, [rbp+0A10h+var_18]
+        89 C2                                   mov     edx, eax
+        48 8D 0D A8 48 01 00                    lea     rcx, unk_416020
+        E8 73 FD FF FF                          call    sub_4014F0
+        48 89 45 B0                             mov     [rbp+0A10h+var_A60], rax
+        8B 95 FC 09 00 00                       mov     edx, [rbp+0A10h+var_14]
+        48 8D 45 C0                             lea     rax, [rbp+0A10h+var_A50]
+        48 89 C1                                mov     rcx, rax
+        E8 5D FD FF FF                          call    sub_4014F0
+        48 89 85 F0 09 00 00                    mov     [rbp+0A10h+var_20], rax
+        48 8B 85 F0 09 00 00                    mov     rax, [rbp+0A10h+var_20]
+        48 8D 55 A0                             lea     rdx, [rbp+0A10h+var_A70]
+        48 89 D1                                mov     rcx, rdx
+        FF D0                                   call    rax
+        B8 00 00 00 00                          mov     eax, 0
+        EB 08                                   jmp     short loc_4017B9
+
+    */
+    $op2 = {48c745a000000000c745a8010000008b85f809000089c2488d0d??4?0100e8????ffff488945b08b95fc090000488d45c04889c1e8??fdffff488985f0090000488b85f0090000488d55a04889d1ffd0}
 
 condition:
     uint16(0) == 0x5a4d and filesize < 1000KB and 
