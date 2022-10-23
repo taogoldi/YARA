@@ -9,7 +9,7 @@ rule dagon_locker_ransomware_packed {
     version="1.0"
     phase = "experimental"
     url = "https://twitter.com/siri_urz/status/1575828753975910400"
-    malware = "Win32.Packed.Ransom.Dagon.Locker"
+    malware = "Win64.Packed.Ransom.Dagon.Locker"
 strings:
     $s1 = "sc.exe" wide ascii nocase
     $s2 = "CoLoadLibrary" wide ascii nocase
