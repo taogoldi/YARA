@@ -10,7 +10,7 @@ rule dagon_locker_ransomware_unpacked {
     version="1.0"
     phase = "experimental"
     url = "https://twitter.com/siri_urz/status/1575828753975910400"
-    malware = "Win32.Unpacked.Ransom.Dagon.Locker"
+    malware = "Win64.Unpacked.Ransom.Dagon.Locker"
 strings:
     /*
         E8 B7 93 FF FF                          call    memset
