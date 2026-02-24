@@ -15,7 +15,6 @@ rule VIDAR_LIKE_22_STAGE2_Variant_Heuristic
 
   condition:
     uint16(0) == 0x5A4D and
-    pe.machine == pe.MACHINE_AMD64 and
     pe.imports("USER32.dll", "CreateDesktopA") and
     pe.imports("USER32.dll", "OpenDesktopA") and
     pe.imports("ADVAPI32.dll", "GetCurrentHwProfileA") and
