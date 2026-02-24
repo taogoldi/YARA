@@ -50,7 +50,6 @@ rule VIDAR_LIKE_22_STAGE1_Variant_Heuristic
 
   condition:
     uint16(0) == 0x5A4D and
-    pe.machine == pe.MACHINE_AMD64 and
     4 of ($api*) and
     2 of ($anti*) and
     ($sig_kexp or $sig_stage_decrypt_wrapper) and

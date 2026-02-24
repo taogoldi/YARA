@@ -16,7 +16,6 @@ rule VIDAR_LIKE_22_STAGE2_HighFidelity
 
   condition:
     uint16(0) == 0x5A4D and
-    pe.machine == pe.MACHINE_AMD64 and
     pe.number_of_sections == 5 and
     pe.imports("USER32.dll", "CreateDesktopA") and
     pe.imports("USER32.dll", "OpenDesktopA") and
