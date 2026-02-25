@@ -6,6 +6,8 @@ rule VIDAR_LIKE_22_STAGE1_Variant_Heuristic
     author = "taogoldi"
     date = "2026-02-24"
     description = "Variant-oriented stage1 heuristic for this cluster (less strict than high-fidelity)"
+    version = 1
+    sha256 = "0cb5a2e3c8aa7c80c8bbfb3a5f737c75807aa0e689dd4ad0a0466d113d8a6b9d"
     confidence = "medium"
 
   strings:
