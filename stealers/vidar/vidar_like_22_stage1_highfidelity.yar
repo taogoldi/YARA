@@ -8,7 +8,6 @@ rule VIDAR_LIKE_22_STAGE1_HighFidelity
     description = "High-fidelity rule for 22.exe-like stage1 loader/decryptor with AMSI+ETW patching"
     version = 1
     sha256 = "0cb5a2e3c8aa7c80c8bbfb3a5f737c75807aa0e689dd4ad0a0466d113d8a6b9d"
-    sample_sha256 = "0cb5a2e3c8aa7c80c8bbfb3a5f737c75807aa0e689dd4ad0a0466d113d8a6b9d"
     confidence = "high"
 
   strings:
