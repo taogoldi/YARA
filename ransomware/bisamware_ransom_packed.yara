@@ -2,13 +2,14 @@ import "pe"
 rule bisamware_ransomware_packed {
     meta:
         description = "Detect packed variants of Bisamware Ransomware"
-        author = "Jake Goldi @ubersec"
+        author = "taogoldi"
         date = "2022-09-29"
         packed_hash1 = "3758900465a0bbb5ce4eab1a5c981a7c35b8334427f606ab722223e2b2dacc73"
         version="1.0"
         phase = "experimental"
         url = "https://twitter.com/h2jazi/status/1570246177756413953"
         malware = "Win64.Ransom.Packed.Bisam"
+        reference = "https://taogoldi.github.io/reverse-engineer/"
     strings:
         $s1 = "Bisamware"
         /*

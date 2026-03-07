@@ -1,7 +1,7 @@
 rule raccoon_stealer {
   meta:
     description = "Detect variants of Raccoon Stealer v2"
-    author = "Jake Goldi @ubersec"
+    author = "taogoldi"
     date = "2022-09-20"
     hash1 = "022432f770bf0e7c5260100fcde2ec7c49f68716751fd7d8b9e113bf06167e03"
     version="1.0"
@@ -10,6 +10,7 @@ rule raccoon_stealer {
     references = "https://www.zscaler.com/blogs/security-research/raccoon-stealer-v2-latest-generation-raccoon-family"
     credits = "@0xd01a"
     malware = "Win32.PWS.Raccoon"
+    reference = "https://taogoldi.github.io/reverse-engineer/"
   strings:
     $s1 = "ffcookies.txt" wide ascii nocase
     $s2 = "wallet.dat" wide ascii nocase

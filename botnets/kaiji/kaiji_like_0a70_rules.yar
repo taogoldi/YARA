@@ -9,6 +9,7 @@ rule Linux_KaijiLike_Persist_C2_0a70 {
     scope = "file"
     description = "Kaiji-like Go ELF with embedded base64 C2 token and quotaoff persistence"
 
+    reference = "https://taogoldi.github.io/reverse-engineer/"
   strings:
     $b64_c2 = "YWlyLnhlbS5sYXQ6MjUxOTR8KG9kaykvKi0=" ascii
     $persist_service = "/usr/lib/systemd/system/quotaoff.service" ascii
@@ -32,6 +33,7 @@ rule Linux_KaijiLike_AresModuleSet_0a70 {
     scope = "file"
     description = "Kaiji/Ares attack module namespace and source path indicators"
 
+    reference = "https://taogoldi.github.io/reverse-engineer/"
   strings:
     $fn1 = "main.Ares_ipspoof" ascii
     $fn2 = "main.Ares_L3_Udp" ascii

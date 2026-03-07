@@ -7,6 +7,7 @@ rule MIRAI_LIKE_094E9_STAGE1_HighFidelity
     sha256 = "094e9d6ee057d38f40c35f018488e35ab6ccd006ed261b17322e78fd5ea2c0cb"
     description = "High-fidelity rule for the validated Mirai-like variant (094e...)"
 
+    reference = "https://taogoldi.github.io/reverse-engineer/"
   strings:
     $s1 = "watchdog_maintain" ascii
     $s2 = "watchdog_pid" ascii

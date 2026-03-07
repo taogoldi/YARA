@@ -10,6 +10,7 @@ rule VIDAR_LIKE_22_STAGE1_HighFidelity
     sha256 = "0cb5a2e3c8aa7c80c8bbfb3a5f737c75807aa0e689dd4ad0a0466d113d8a6b9d"
     confidence = "high"
 
+    reference = "https://taogoldi.github.io/reverse-engineer/"
   strings:
     // API patch targets
     $api1 = "AmsiScanBuffer" ascii wide
