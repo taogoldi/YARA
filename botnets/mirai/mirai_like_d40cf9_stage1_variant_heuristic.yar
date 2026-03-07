@@ -3,7 +3,7 @@ rule MIRAI_LIKE_D40CF9_STAGE1_VariantHeuristic
   meta:
     author = "taogoldi"
     date = "2026-02-26"
-    version = "1"
+    version = "2"
     sha256 = "d40cf9c95dcedf4f19e4a5f5bb744c8e98af87eb5703c850e6fda3b613668c28"
     description = "Heuristic Mirai-like detector for this cluster family"
 
