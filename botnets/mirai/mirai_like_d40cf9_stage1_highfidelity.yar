@@ -7,6 +7,7 @@ rule MIRAI_LIKE_D40CF9_STAGE1_HighFidelity
     sha256 = "d40cf9c95dcedf4f19e4a5f5bb744c8e98af87eb5703c850e6fda3b613668c28"
     description = "High-fidelity rule for the analyzed Mirai-like ELF sample"
 
+    reference = "https://taogoldi.github.io/reverse-engineer/"
   strings:
     $s1 = "[*] Connected to authorized server (%s)" ascii
     $s2 = "[!!!] SECURITY ALERT: Command from unauthorized IP: %s (expected: %s)" ascii

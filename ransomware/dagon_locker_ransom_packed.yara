@@ -2,7 +2,7 @@ import "pe"
 rule dagon_locker_ransomware_packed {
   meta:
     description = "Detect Packed Dagon Locker Ransomware"
-    author = "Jake Goldi @ubersec"
+    author = "taogoldi"
     date = "2022-11-09"
     packed_hash1 = "a0fef8b9c275d11c2922db9f0bf0d696f4a8598de488c26d62313540eb22b470"
     packed_hash2 = "c70aa87fbbcc8e6e5d9c8272c4783d35ba607b07cc5e93e12dc4d0132bd84ef0"
@@ -10,6 +10,7 @@ rule dagon_locker_ransomware_packed {
     phase = "experimental"
     url = "https://twitter.com/siri_urz/status/1575828753975910400"
     malware = "Win64.Packed.Ransom.Dagon.Locker"
+    reference = "https://taogoldi.github.io/reverse-engineer/"
 strings:
     $s1 = "sc.exe" wide ascii nocase
     $s2 = "CoLoadLibrary" wide ascii nocase

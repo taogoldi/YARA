@@ -6,6 +6,7 @@ rule MIRAI_LIKE_STAGE1_Family_Heuristic
     version = "2"
     description = "Family-level heuristic intended to match both d40... and 094e... Mirai-like variants"
 
+    reference = "https://taogoldi.github.io/reverse-engineer/"
   strings:
     $core1 = "/etc/config/resolv.conf" ascii
     $core2 = "__open_nameservers" ascii
