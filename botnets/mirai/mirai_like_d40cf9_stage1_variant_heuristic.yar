@@ -7,6 +7,7 @@ rule MIRAI_LIKE_D40CF9_STAGE1_VariantHeuristic
     sha256 = "d40cf9c95dcedf4f19e4a5f5bb744c8e98af87eb5703c850e6fda3b613668c28"
     description = "Heuristic Mirai-like detector for this cluster family"
 
+    reference = "https://taogoldi.github.io/reverse-engineer/"
   strings:
     $m1 = "udpslam" ascii
     $m2 = "udpburst" ascii
