@@ -1,7 +1,7 @@
 rule MIRAI_LIKE_094E9_STAGE1_HighFidelity
 {
   meta:
-    author = "taogoldi"
+    author = "Tao Goldi"
     date = "2026-03-07"
     version = "2"
     sha256 = "094e9d6ee057d38f40c35f018488e35ab6ccd006ed261b17322e78fd5ea2c0cb"

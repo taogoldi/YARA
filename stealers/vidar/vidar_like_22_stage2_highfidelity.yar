@@ -3,7 +3,7 @@ import "pe"
 rule VIDAR_LIKE_22_STAGE2_HighFidelity
 {
   meta:
-    author = "taogoldi"
+    author = "Tao Goldi"
     date = "2026-02-24"
     description = "High-fidelity rule for decrypted stage2 from 22.exe"
     version = 1

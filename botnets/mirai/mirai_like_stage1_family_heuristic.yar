@@ -1,7 +1,7 @@
 rule MIRAI_LIKE_STAGE1_Family_Heuristic
 {
   meta:
-    author = "taogoldi"
+    author = "Tao Goldi"
     date = "2026-03-07"
     version = "2"
     description = "Family-level heuristic intended to match both d40... and 094e... Mirai-like variants"

@@ -3,7 +3,7 @@ import "pe"
 rule VIDAR_LIKE_22_STAGE1_Variant_Heuristic
 {
   meta:
-    author = "taogoldi"
+    author = "Tao Goldi"
     date = "2026-02-24"
     description = "Variant-oriented stage1 heuristic for this cluster (less strict than high-fidelity)"
     version = 1
