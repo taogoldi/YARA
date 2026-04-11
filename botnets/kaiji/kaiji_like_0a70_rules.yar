@@ -2,7 +2,7 @@ import "elf"
 
 rule Linux_KaijiLike_Persist_C2_0a70 {
   meta:
-    author = "taogoldi"
+    author = "Tao Goldi"
     family = "kaiji-like"
     version = "1"
     sha256 = "0a70d7699c8e0629597dcc03b1aef0beebec03ae0580f2c070fb2bfd2fd89a71"
@@ -26,7 +26,7 @@ rule Linux_KaijiLike_Persist_C2_0a70 {
 
 rule Linux_KaijiLike_AresModuleSet_0a70 {
   meta:
-    author = "taogoldi"
+    author = "Tao Goldi"
     family = "kaiji-like"
     version = "1"
     sha256 = "0a70d7699c8e0629597dcc03b1aef0beebec03ae0580f2c070fb2bfd2fd89a71"

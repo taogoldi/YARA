@@ -7,7 +7,7 @@
         SHA256: 8f31c06c8e7ea9eb451bf26666ac4a958bb485b2a8b71feace1981633b116c92
         File:   RMnsgES.exe
 
-    Author: Threat Intel Platform
+    author = "Tao Goldi"
     Date:   2026-04
 */
 
