@@ -82,7 +82,7 @@ rule Chaos_Kaiji_Generic
         // SOCKS proxy
         $socks1 = "Socks5Auth" ascii
         $socks2 = "Socks5Connect" ascii
-        $proxy = "StartProxy" ascii
+
 
         // Terminal
         $term1 = "terminalrun" ascii
