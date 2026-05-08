@@ -12,7 +12,7 @@ rule PoolParty_ThreadPool_Injection
 {
     meta:
         description    = "Detects SafeBreach-derived PoolParty thread-pool process injection patterns"
-        author         = "tao-threatintel"
+        author         = "taogoldi"
         date           = "2026-05-07"
         license        = "Apache-2.0"
         reference1     = "https://safebreach.com/blog/process-injection-using-windows-thread-pools/"
