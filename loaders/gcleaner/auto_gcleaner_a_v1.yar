@@ -15,6 +15,8 @@ rule AUTO_gcleaner_a_v1 {
       validation_other_families = 241
       validation_other_family_hits = 0
       validation_heldout_hits = "11 of 60"
+      live_precision = "1.00 over 17 matches"
+      live_measured = "2026-09-24"
       hash1 = "93f739b675520ba69cc39e7c066383e53161b7d9d03e7b287ca52ee4c146b3ed"
       hash2 = "f1e81821f74fc598366bdd9142f237404b7dc7b32c794d9a6d76ebc718d7a20b"
       hash3 = "80a741131bec7b3fc74b4cec678fa45e61760914a9e87c4434cb12f8266df426"
