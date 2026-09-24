@@ -15,6 +15,8 @@ rule AUTO_loki_a_v1 {
       validation_other_families = 258
       validation_other_family_hits = 0
       validation_heldout_hits = "3 of 60"
+      live_precision = "1.00 over 4 matches"
+      live_measured = "2026-09-24"
       hash1 = "c6df74426be4447e6956ec541c65e8a3dbd7136fb86c1a173ef336110d985c22"
       hash2 = "dadf297d60f465883336bd72b69fafbaba821fa0cc580d802b7f50e94c08793e"
       hash3 = "652a323b76a64c51111ed62e9a6096e5e925b7ee0b1f2700a38be486c9825550"
