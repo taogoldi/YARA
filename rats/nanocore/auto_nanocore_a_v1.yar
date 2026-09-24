@@ -15,8 +15,8 @@ rule AUTO_nanocore_a_v1 {
       validation_other_families = 126
       validation_other_family_hits = 0
       validation_heldout_hits = "8 of 60"
-      live_precision = "1.00 over 87 matches"
-      live_measured = "2026-09-21"
+      live_precision = "1.00 over 187 matches"
+      live_measured = "2026-09-24"
       hash1 = "a2d004f78528c839119532cff09cf6f777baea9b1680d69eeb82d6a7700690db"
       hash2 = "04c147559ea23daa59503c0b935c8df2728893ea82211813c8428b630fcd3768"
       hash3 = "7cdd2a796b1b8de7131deadb7a9d6b348d321ce6b7af022124b0826166f70c18"
