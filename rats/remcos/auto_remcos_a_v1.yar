@@ -15,8 +15,8 @@ rule AUTO_remcos_a_v1 {
       validation_other_families = 121
       validation_other_family_hits = 0
       validation_heldout_hits = "7 of 60"
-      live_precision = "1.00 over 366 matches"
-      live_measured = "2026-09-21"
+      live_precision = "1.00 over 493 matches"
+      live_measured = "2026-09-24"
       hash1 = "e7227b215daa43a3c529f9d9631880b8c20b319f049f081fbfac75011c31ed2b"
       hash2 = "e61e14aaba209be7bfed6b4ef08d1de630fd0b2f05c12eeb3f8906946522e7b9"
       hash3 = "43ee2409e135916fab34e910035ff437eb1eaa670000c4f0948ba33f11a7083b"
