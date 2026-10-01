@@ -15,8 +15,8 @@ rule AUTO_darkcloud_a_v1 {
       validation_other_families = 263
       validation_other_family_hits = 0
       validation_heldout_hits = "42 of 60"
-      live_precision = "1.00 over 47 matches"
-      live_measured = "2026-09-28"
+      live_precision = "1.00 over 146 matches"
+      live_measured = "2026-10-01"
       hash1 = "9e4efb8300d61fa29a18a9169965c531fc547234d3ced0532aa341f899801621"
       hash2 = "91ce11dba631a9613d7c96409db89bf0cc358eff124632ad56f25fd6b372b070"
       hash3 = "9eb48972a13c1c27cfd7f23e517321655648e5796bd26850d255d4a12b91fff9"
