@@ -15,8 +15,8 @@ rule AUTO_avemariarat_a_v1 {
       validation_other_families = 265
       validation_other_family_hits = 0
       validation_heldout_hits = "6 of 60"
-      live_precision = "1.00 over 17 matches"
-      live_measured = "2026-09-28"
+      live_precision = "1.00 over 82 matches"
+      live_measured = "2026-10-01"
       hash1 = "0911748a95f6a362d1ed8d6fcd1a7889167520cdd506522658d84a69c9a088ab"
       hash2 = "69d962a08c69bee560dae12bf7209a36a8a919bef0b65bf8277c823a5c4e1fd8"
       hash3 = "fee959ff12e4ac5df67164ed83565a768d1286263bed759a32dcbe668ef6390f"
