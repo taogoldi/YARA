@@ -16,7 +16,7 @@ rule AUTO_njrat_a_v1 {
       validation_other_family_hits = 0
       validation_heldout_hits = "13 of 60"
       live_precision = "1.00 over 1697 matches"
-      live_measured = "2026-10-01"
+      live_measured = "2026-10-05"
       hash1 = "3709e6f489626cd6300e0a4f3506d12d4aea80973bfa8673608b1fa20d2fd71a"
       hash2 = "cd1ab1369c5b2090a046e27574158e038fabdabc695623b3e85810246990e351"
       hash3 = "6ffd1b8b7c4912b4fb0bdb1437371a1e761854092fb0c3e4934d32e9a30d9f38"
