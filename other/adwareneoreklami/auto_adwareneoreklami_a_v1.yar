@@ -16,7 +16,7 @@ rule AUTO_adwareneoreklami_a_v1 {
       validation_other_family_hits = 0
       validation_heldout_hits = "60 of 60"
       live_precision = "1.00 over 982 matches"
-      live_measured = "2026-10-01"
+      live_measured = "2026-10-05"
       hash1 = "436d6e12fda2a669bf1cb8a46698578f7dbf6d6e9352485b965537a8037c496e"
       hash2 = "72e5766a1923f703b842bd2252aafb6ef0842821862b82ccb9ff288a973a57af"
       hash3 = "9146cee3d387cb3d665885b95d885734541f281cbb2a4726b6a59df922a83ee7"
