@@ -16,7 +16,7 @@ rule AUTO_a310logger_c_v1 {
       validation_other_family_hits = 0
       validation_heldout_hits = "3 of 60"
       live_precision = "0.97 over 77 matches"
-      live_measured = "2026-10-01"
+      live_measured = "2026-10-05"
       hash1 = "8d9f8265ce85222ef929005522d3c45fc185cccd1ffca0b365ef3b2b165d7868"
       hash2 = "e452b95b8707139fccb98f931901ef3a77b8a199e7fa8e421e4e0a66f8cf0cc4"
       hash3 = "f79bbbb5426834f7b541a87414c3f9c319d8e1ea2c8bfcef4ec880a8bbb69332"
