@@ -7,6 +7,7 @@ rule AUTO_snakekeylogger_a_v6 {
       family = "snakekeylogger"
       date = "2026-10-10"
       version = 6
+      supersedes = "AUTO_snakekeylogger_a_v4"
       generator = "yara-forge/yargen-go"
       label_basis = "oracle-labelled samples (decoded config, MOTIF, MCRIT, VirusTotal, abuse.ch)"
       training_samples = 40
