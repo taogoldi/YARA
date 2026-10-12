@@ -7,6 +7,7 @@ rule AUTO_guloader_b_v4 {
       family = "guloader"
       date = "2026-10-09"
       version = 4
+      supersedes = "AUTO_guloader_a_v3"
       generator = "yara-forge/yargen-go"
       label_basis = "oracle-labelled samples (decoded config, MOTIF, MCRIT, VirusTotal, abuse.ch)"
       training_samples = 40
