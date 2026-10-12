@@ -15,6 +15,8 @@ rule AUTO_xworm_a_v3 {
       validation_other_families = 485
       validation_other_family_hits = 0
       validation_heldout_hits = "3 of 60"
+      live_precision = "0.00 over 5 matches"
+      live_measured = "2026-10-12"
       hash1 = "d70001e484f2c8d5b03ee6afda18c69412cee89bd72f562a19882f2448975192"
       hash2 = "650316ebfb7fc834a7cd0b4f9db79c0374cb92e1a671719f95939c0c8ff4ab24"
       hash3 = "84ebe6582ac80ac71e7745e760229a264119d37c0fd8f9f1ed3ce02b57b1273e"
