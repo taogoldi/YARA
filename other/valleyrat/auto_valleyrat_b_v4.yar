@@ -16,6 +16,8 @@ rule AUTO_valleyrat_b_v4 {
       validation_other_families = 548
       validation_other_family_hits = 0
       validation_heldout_hits = "2 of 60"
+      live_precision = "1.00 over 1 matches"
+      live_measured = "2026-10-22"
       hash1 = "516201070aaa2085711cd65d71b59ae200cd1894a7b2f28a7c1ee4560fb6d5ae"
       hash2 = "254ddb2cf9c1878b47864a23ac71418e3aa4b7afb110a616dbc6a67106d090a2"
       hash3 = "12b920865bc8bd9bad20650a0f7849fe2856de3d72bc5f1a93bb288e8eefaca2"
