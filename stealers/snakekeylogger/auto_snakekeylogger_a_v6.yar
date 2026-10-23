@@ -17,7 +17,7 @@ rule AUTO_snakekeylogger_a_v6 {
       validation_other_family_hits = 0
       validation_heldout_hits = "3 of 60"
       live_precision = "1.00 over 15 matches"
-      live_measured = "2026-10-22"
+      live_measured = "2026-10-23"
       hash1 = "c0e8dcf4096de51fec0709a1e6778923be7f5320389e38cf6b93965ef4daa904"
       hash2 = "e8c96e9b3d270abd9522f17ab7d493d91099e9b0d637b792d686b6536a59ec7e"
       hash3 = "39a4cae35b483e70e69f5536dd47d608576c26809d82c75487ddd87525cd20d5"
