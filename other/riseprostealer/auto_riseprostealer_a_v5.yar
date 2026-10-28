@@ -17,7 +17,7 @@ rule AUTO_riseprostealer_a_v5 {
       validation_other_family_hits = 0
       validation_heldout_hits = "39 of 60"
       live_precision = "0.99 over 536 matches"
-      live_measured = "2026-10-26"
+      live_measured = "2026-10-27"
       hash1 = "c67a59e1cd092348f9a598061487631e1c0b2d30d38133ec04c213113ef733e9"
       hash2 = "fbeb0e418fb3c16c3ff0a654969998ab3c2237abd3d840066731df8f212c95bc"
       hash3 = "d0295c334677da7ca28746b3feff2e82320314322d99af837090c4e87b362479"
