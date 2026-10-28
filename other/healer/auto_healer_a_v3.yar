@@ -16,8 +16,8 @@ rule AUTO_healer_a_v3 {
       validation_other_families = 562
       validation_other_family_hits = 0
       validation_heldout_hits = "4 of 60"
-      live_precision = "1.00 over 35 matches"
-      live_measured = "2026-10-27"
+      live_precision = "0.92 over 38 matches"
+      live_measured = "2026-10-28"
       hash1 = "9ba26b3aa6b5062b6147b132617cb7b187bbf9becf6f7b4312fc3246fd534721"
       hash2 = "f1ca484ee483d8e3bf9b4068d3f374ba5f87647f0fe816ec33761468ef1b63e4"
       hash3 = "8a943b763cea7ec9d88ce33e55ef9665919439a104c9f415a6c6dc62528e8c75"
