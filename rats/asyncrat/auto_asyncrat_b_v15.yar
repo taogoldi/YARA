@@ -17,7 +17,7 @@ rule AUTO_asyncrat_b_v15 {
       validation_other_family_hits = 0
       validation_heldout_hits = "2 of 60"
       live_precision = "0.80 over 18 matches"
-      live_measured = "2026-10-30"
+      live_measured = "2026-10-31"
       hash1 = "1533acd36572b752f7e3dd1f01ed12ce6cc89491dc8f5a16304e9ce15ebd4ae6"
       hash2 = "78ebd82a7705f72ad48780803cc540ccd240fe04fd2cd4f092445d624e5197df"
       hash3 = "eaad67ae6935cb76b29379c9e17b9d11994b4211dafefb6b55240e908ff4ba8e"
