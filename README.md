@@ -21,7 +21,7 @@ Rules are organised by malware class, then family: `<class>/<family>/<rule>.yar`
 | `loaders/` | AnimateClipper (stage 1, Go dropper), FUD Crypt (test payload, VerShadow), GuLoader NSIS installer, GCleaner*, SmokeLoader* |
 | `ransomware/` | Bisamware, Crytox, Dagon Locker (packed and unpacked) |
 | `rats/` | AsyncRAT*, DcRAT build, NanoCore*, njRAT im523 and njRAT*, Pulsar, Quasar native loader, Remcos*, VioletRAT v6, XWorm crypter and RAT |
-| `stealers/` | Amadey cred64 and Amadey*, IRoveroll, Pony/Fareit, Pulsar, Raccoon v2, SnakeKeylogger*, Vidar-like stage 1/2 and Vidar* |
+| `stealers/` | Amadey cred64 and Amadey*, CloudSyncD (macOS fake installer and stager), IRoveroll, Pony/Fareit, Pulsar, Raccoon v2, SnakeKeylogger*, Vidar-like stage 1/2 and Vidar* |
 
 `*` generated rule.
 
