@@ -1,21 +1,29 @@
 /*
-   AnimateClipper stage-1 NativeAOT loader
+   Moonshine loader (C# compiled with NativeAOT), first analysed as the
+   AnimateClipper stage-1 loader
    Author: taogoldi
    TLP:WHITE
+
+   The loader is a crypter, not part of AnimateClipper: its own build paths
+   name it (F:\Projects\Moonshine-Csharp\out\native\aethsync.pdb,
+   MoonshineStub.exe, Moonshine.Core.dll), and builds carry AnimateClipper,
+   XWorm, PhantomStealer, Formbook and NeedleStealer. The rules were renamed
+   from AnimateClipper_* to Moonshine_Loader_* in November 2026 so that a
+   match names the loader rather than one of its payloads.
 */
 
 import "pe"
 import "math"
 
-rule AnimateClipper_StringDecryptor_Constants
+rule Moonshine_Loader_StringDecryptor_Constants
 {
     meta:
         author      = "taogoldi"
         reference   = "https://taogoldi.github.io/reverse-engineer/blog/animateclipper-nativeaot-loader/"
         license     = "Apache-2.0"
         date        = "2026-08-01"
-        version     = 1
-        description = "AnimateClipper stage-1 keystream string decryptor constant triplet"
+        version     = 2
+        description = "Moonshine loader keystream string decryptor constants (formerly AnimateClipper_StringDecryptor_Constants)"
         hash        = "21bf44a654a0059f7bb974ffe6252db63e998d5f95937454d45da4d700267471"
         tlp         = "TLP:WHITE"
         fidelity    = "high"
@@ -34,15 +42,15 @@ rule AnimateClipper_StringDecryptor_Constants
         all of them
 }
 
-rule AnimateClipper_Loader_GfxSection
+rule Moonshine_Loader_GfxSection
 {
     meta:
         author      = "taogoldi"
         reference   = "https://taogoldi.github.io/reverse-engineer/blog/animateclipper-nativeaot-loader/"
         license     = "Apache-2.0"
         date        = "2026-08-01"
-        version     = 1
-        description = "NativeAOT loader carrying an encrypted payload in a .gfx section"
+        version     = 2
+        description = "Moonshine loader build carrying an encrypted payload in a .gfx section (formerly AnimateClipper_Loader_GfxSection)"
         hash        = "21bf44a654a0059f7bb974ffe6252db63e998d5f95937454d45da4d700267471"
         tlp         = "TLP:WHITE"
         fidelity    = "medium"
@@ -51,6 +59,12 @@ rule AnimateClipper_Loader_GfxSection
         $aot1 = "System.Private.TypeLoader.dll" ascii
         $aot2 = "System.Private.Reflection.Execution" ascii
         $mod  = "Moonshine.Core.dll" ascii
+        // v2: builds that keep the .gfx section but ship without the NativeAOT
+        // reflection metadata still carry the loader's own module name or its
+        // build path
+        $aeth_exe = "aethsync.exe" ascii wide
+        $aeth_dll = "aethsync.dll" ascii wide
+        $pdb      = "\\Moonshine-Csharp\\" ascii
 
     condition:
         uint16(0) == 0x5A4D and
@@ -59,18 +73,21 @@ rule AnimateClipper_Loader_GfxSection
             pe.sections[i].name == ".gfx" and
             math.entropy(pe.sections[i].raw_data_offset, pe.sections[i].raw_data_size) > 7.9
         ) and
-        2 of ($aot1, $aot2, $mod)
+        (
+            2 of ($aot1, $aot2, $mod) or
+            any of ($aeth_exe, $aeth_dll, $pdb)
+        )
 }
 
-rule AnimateClipper_Composite
+rule Moonshine_Loader_Composite
 {
     meta:
         author      = "taogoldi"
         reference   = "https://taogoldi.github.io/reverse-engineer/blog/animateclipper-nativeaot-loader/"
         license     = "Apache-2.0"
         date        = "2026-08-01"
-        version     = 1
-        description = "AnimateClipper stage-1: keystream constants + NativeAOT + aethsync identity"
+        version     = 2
+        description = "Moonshine loader: keystream constants + aethsync / Moonshine.Core identity (formerly AnimateClipper_Composite)"
         hash        = "21bf44a654a0059f7bb974ffe6252db63e998d5f95937454d45da4d700267471"
         tlp         = "TLP:WHITE"
         fidelity    = "high"
@@ -90,15 +107,15 @@ rule AnimateClipper_Composite
         1 of ($aeth, $moon)
 }
 
-rule AnimateClipper_PayloadContainer
+rule Moonshine_Loader_PayloadContainer
 {
     meta:
         author      = "taogoldi"
         reference   = "https://taogoldi.github.io/reverse-engineer/blog/animateclipper-nativeaot-loader/"
         license     = "Apache-2.0"
         date        = "2026-08-28"
-        version     = 1
-        description = "AnimateClipper encrypted stage-2 container carried as a PE overlay"
+        version     = 2
+        description = "Moonshine loader encrypted stage-2 container carried as a PE overlay (formerly AnimateClipper_PayloadContainer)"
         hash        = "be06aab9e611d76a76f37a89cdef1df2ea59e591ff2654c8c679bfed0f7710bb"
         hash2       = "3ee1860c0f5353263b70752681bd78872a5b9abf642b93669993f28f83933215"
         tlp         = "TLP:WHITE"
@@ -121,4 +138,30 @@ rule AnimateClipper_PayloadContainer
             uint32(@magic[i] + 4) > 65536 and
             math.entropy(@magic[i] + 8, uint32(@magic[i] + 4)) > 7.9
         )
+}
+
+rule XorRamp_Overlay_Inflation
+{
+    meta:
+        author      = "taogoldi"
+        reference   = "https://taogoldi.github.io/reverse-engineer/blog/animateclipper-nativeaot-loader/"
+        license     = "Apache-2.0"
+        date        = "2026-11-02"
+        version     = 1
+        description = "Size-inflation overlay: whole megabytes of one repeating 4-byte pattern x, x^1, x^2, x^3. Seen on Moonshine loader builds and on unattributed NativeAOT builds filed as AnimateClipper; it marks the inflation step, not a family"
+        tlp         = "TLP:WHITE"
+        fidelity    = "medium"
+
+    condition:
+        uint16(0) == 0x5A4D and
+        pe.overlay.size >= 1048576 and
+        pe.overlay.size % 1048576 == 0 and
+        uint8(pe.overlay.offset + 1) == uint8(pe.overlay.offset) ^ 1 and
+        uint8(pe.overlay.offset + 2) == uint8(pe.overlay.offset) ^ 2 and
+        uint8(pe.overlay.offset + 3) == uint8(pe.overlay.offset) ^ 3 and
+        // the same four bytes at the start, a quarter in, half way and at the end
+        uint32(pe.overlay.offset + 4) == uint32(pe.overlay.offset) and
+        uint32(pe.overlay.offset + pe.overlay.size \ 4) == uint32(pe.overlay.offset) and
+        uint32(pe.overlay.offset + pe.overlay.size \ 2) == uint32(pe.overlay.offset) and
+        uint32(filesize - 4) == uint32(pe.overlay.offset)
 }

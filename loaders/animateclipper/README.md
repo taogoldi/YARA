@@ -1,6 +1,15 @@
-# AnimateClipper
+# AnimateClipper and the Moonshine loader
 
-Detection rules for the AnimateClipper stage-1 loader and its Go dropper.
+Detection rules for the loader first analysed as the AnimateClipper stage 1,
+and for the AnimateClipper Go dropper.
+
+**The loader is Moonshine, a crypter, not part of AnimateClipper.** Its builds
+name it: the PDB path `F:\Projects\Moonshine-Csharp\out\native\aethsync.pdb`,
+the stub `MoonshineStub.exe` and the module `Moonshine.Core.dll`. The same
+loader carries AnimateClipper, XWorm, PhantomStealer, Formbook and
+NeedleStealer, so in November 2026 its rules were renamed from
+`AnimateClipper_*` to `Moonshine_Loader_*`. A match names the loader, not the
+payload inside it.
 
 The loader is a .NET NativeAOT binary: C# compiled ahead of time to native
 x86-64, with no CLR header and no IL, so managed decompilers and CLR-header-gated
@@ -15,10 +24,11 @@ Full analysis: <https://taogoldi.github.io/reverse-engineer/blog/animateclipper-
 
 | File | Rule | Signal | Fidelity |
 |---|---|---|---|
-| `animateclipper.yar` | `AnimateClipper_StringDecryptor_Constants` | Full instruction encodings of the keystream key schedule | Medium |
-| `animateclipper.yar` | `AnimateClipper_Loader_GfxSection` | NativeAOT markers plus a high-entropy `.gfx` section | Medium |
-| `animateclipper.yar` | `AnimateClipper_Composite` | Constants gated on NativeAOT markers and the `aethsync` / `Moonshine.Core` identity, x64 only | High |
-| `animateclipper.yar` | `AnimateClipper_PayloadContainer` | Overlay stage-2 container: magic plus a self-consistent length plus high entropy | Medium |
+| `animateclipper.yar` | `Moonshine_Loader_StringDecryptor_Constants` (was `AnimateClipper_StringDecryptor_Constants`) | Full instruction encodings of the keystream key schedule | Medium |
+| `animateclipper.yar` | `Moonshine_Loader_GfxSection` (was `AnimateClipper_Loader_GfxSection`) | A high-entropy `.gfx` section plus NativeAOT markers, or the `aethsync` module name, or the `Moonshine-Csharp` build path | Medium |
+| `animateclipper.yar` | `Moonshine_Loader_Composite` (was `AnimateClipper_Composite`) | Constants gated on NativeAOT markers and the `aethsync` / `Moonshine.Core` identity, x64 only | High |
+| `animateclipper.yar` | `Moonshine_Loader_PayloadContainer` (was `AnimateClipper_PayloadContainer`) | Overlay stage-2 container: magic plus a self-consistent length plus high entropy | Medium |
+| `animateclipper.yar` | `XorRamp_Overlay_Inflation` | Whole megabytes of one repeating 4-byte pattern `x, x^1, x^2, x^3` appended to the file | Medium |
 | `animateclipper_dropper.yar` | `AnimateClipper_GoDropper_SIRDCU` | The dropper's unpublished Go module name inside its buildinfo blob | High |
 
 ## Operational guidance
@@ -45,6 +55,24 @@ magic is far too short to match on alone, so the rule requires the length field
 to describe exactly the bytes remaining in the file.
 
 ## Coverage
+
+November 2026 review, against a platform corpus of about 66,000 labelled and
+random samples:
+
+- 17 of 18 known builds match at least one rule. The keystream builds (11)
+  match the constants and composite rules. Three later `.gfx` builds carry no
+  keystream constants and no NativeAOT metadata, only `aethsync.exe` and in one
+  case the `Moonshine-Csharp` PDB path; `Moonshine_Loader_GfxSection` v2 now
+  takes those.
+- `XorRamp_Overlay_Inflation` covers five of the Moonshine builds and three NativeAOT
+  builds filed as AnimateClipper that carry no Moonshine identity at all. The
+  overlay is the only thing they share with the Moonshine builds, so the rule
+  names the inflation step, not a family.
+- The one AnimateClipper sample nothing matches is the clipboard hijacker
+  itself (it imports `GetClipboardData` / `SetClipboardData`); there is no
+  payload rule yet.
+
+The original coverage note, from the August analysis:
 
 Nine of nine known loader builds match, including three earlier builds recovered
 from an internal collection where they were filed as AgentTesla, SnakeKeylogger
