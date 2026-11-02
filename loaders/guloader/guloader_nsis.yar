@@ -113,23 +113,23 @@ rule GuLoader_NSIS_DecoyPadding
         description = "GuLoader filesize-inflation decoy: file dominated by a single constant byte"
         author = "Tao Goldi"
         date = "2026-04"
-        version = 1
+        version = 2
         severity = "info"
         family = "GuLoader"
         notes = "Run on the extracted Maynard.pen / Ganocephala176.ham. Generic enough to catch new variants that pick a different fill byte."
 
     strings:
-        // 256 bytes of 0x5A (Maynard.pen pattern)
+        // 64 bytes of 0x5A (Maynard.pen pattern)
         $pad_5a = { 5A 5A 5A 5A 5A 5A 5A 5A 5A 5A 5A 5A 5A 5A 5A 5A
                     5A 5A 5A 5A 5A 5A 5A 5A 5A 5A 5A 5A 5A 5A 5A 5A
                     5A 5A 5A 5A 5A 5A 5A 5A 5A 5A 5A 5A 5A 5A 5A 5A
                     5A 5A 5A 5A 5A 5A 5A 5A 5A 5A 5A 5A 5A 5A 5A 5A }
-        // 256 bytes of 0xB7 (Ganocephala.ham pattern)
+        // 64 bytes of 0xB7 (Ganocephala.ham pattern)
         $pad_b7 = { B7 B7 B7 B7 B7 B7 B7 B7 B7 B7 B7 B7 B7 B7 B7 B7
                     B7 B7 B7 B7 B7 B7 B7 B7 B7 B7 B7 B7 B7 B7 B7 B7
                     B7 B7 B7 B7 B7 B7 B7 B7 B7 B7 B7 B7 B7 B7 B7 B7
                     B7 B7 B7 B7 B7 B7 B7 B7 B7 B7 B7 B7 B7 B7 B7 B7 }
-        // 256 bytes of 0xAC (piasaba trailing pad)
+        // 64 bytes of 0xAC (piasaba trailing pad)
         $pad_ac = { AC AC AC AC AC AC AC AC AC AC AC AC AC AC AC AC
                     AC AC AC AC AC AC AC AC AC AC AC AC AC AC AC AC
                     AC AC AC AC AC AC AC AC AC AC AC AC AC AC AC AC

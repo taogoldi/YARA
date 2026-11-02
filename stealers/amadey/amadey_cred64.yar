@@ -113,7 +113,7 @@ rule Amadey_cred64_WifiExfil {
     meta:
         author      = "Tao Goldi"
         description = "Amadey_cred64 — WiFi credential theft via netsh"
-        version     = 1
+        version     = 2
         date        = "2026-04-27"
         hash        = "3bdcb32460e5a613c35b14205e4a98ad50a03a1d7d17f4c30f2935c6f6d5db69"
         tlp         = "TLP:WHITE"
@@ -125,7 +125,13 @@ rule Amadey_cred64_WifiExfil {
         $netsh_export = "bfM2h0 g9Rve28Ea7EEy2pQ6fwBk4rpxZLsw3UUlKF==" ascii
 
     condition:
-        uint16(0) == 0x5A4D and any of ($netsh_*)
+        // v2: the plaintext netsh command is common to many stealers; on its own it needs the
+        // cred64 export pair (Main + Save) beside it
+        uint16(0) == 0x5A4D and
+        (
+            $netsh_export or
+            ($netsh_show and pe.is_dll() and pe.exports("Main") and pe.exports("Save"))
+        )
 }
 
 rule Amadey_cred64_Full {

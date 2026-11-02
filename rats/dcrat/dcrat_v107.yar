@@ -33,30 +33,22 @@ rule DcRAT_Generic
         description = "Generic DcRAT / Dark Crystal RAT family detection"
         author = "Tao Goldi"
         date = "2026-04"
-        version = 1
+        version = 3
         severity = "high"
         family = "DcRAT"
 
     strings:
         $salt = "DcRatByqwqdanchun" ascii wide
         $mutex_prefix = "DcRatMutex_" ascii wide
-        $ns1 = "Client.Algorithm" ascii wide
-        $ns2 = "Client.Connection" ascii wide
-        $ns3 = "Client.Helper" ascii wide
-        $ns4 = "Client.Install" ascii wide
-        $msgpack = "MessagePackLib" ascii wide
-        $amsi = "AmsiScanBuffer" ascii wide
-        $pong = "Po_ng" ascii wide
-        $plugin = "plu_gin" ascii wide
-        $save = "save_Plugin" ascii wide
+        // v3: the Client.* namespaces, MessagePackLib and the Po_ng / plu_gin / save_Plugin
+        // packet names were dropped. They are the AsyncRAT code base, shared by AsyncRAT and
+        // VenomRAT builds, and matched those as DcRAT.
 
     condition:
         uint16(0) == 0x5A4D and
         pe.imports("mscoree.dll") and
         (
             $salt or
-            $mutex_prefix or
-            (3 of ($ns*) and $msgpack) or
-            ($pong and $plugin and $save)
+            $mutex_prefix
         )
 }

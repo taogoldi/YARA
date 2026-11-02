@@ -10,7 +10,7 @@ rule StudioSecGhost_HVNC_Agent
 {
     meta:
         author      = "taogoldi"
-        version     = 1
+        version     = 2
         date        = "2026-05-19"
         hash        = "5940c41ab003399680a04d726587eed242e4ad8969abe4b5617d712ff190a852"
         tlp         = "TLP:CLEAR"
@@ -23,7 +23,6 @@ rule StudioSecGhost_HVNC_Agent
         $bid_search         = "StudioSecGhost" wide
         $bid_banner_class   = "StudioSecVNC_Banner" wide
         $bid_banner_title   = "StudioSecVNC Banner" wide
-        $bid_anchor_a       = "GSystem" wide
         $bid_anchor_b       = ".SecAnchor" wide
 
         // Distinctive log-format prefixes (composite signature)
@@ -44,12 +43,6 @@ rule StudioSecGhost_HVNC_Agent
         $art_task_xml       = "chrome_task_%u.xml" wide
         $art_cleanup        = "ssv_cleanup.bat" wide
 
-        // Victim-facing lockout banner
-        $banner_text        = "  WARNING!  SECURITY AUDIT IN PROGRESS.  " wide
-
-        // Browser launch arguments (Chromium piggyback profile)
-        $browser_args       = "--hide-crash-restore-bubble --disable-backgrounding-occluded-windows --disable-renderer-backgrounding --disable-occlusion-tracking" wide
-
     condition:
         uint16(0) == 0x5a4d
         and pe.machine == pe.MACHINE_AMD64
@@ -60,6 +53,8 @@ rule StudioSecGhost_HVNC_Agent
             $bid_search
             or $bid_title
             or $bid_banner_class
+            or $bid_banner_title
+            or $bid_anchor_b
         )
         and 3 of ($log_*)
         and any of ($art_*)

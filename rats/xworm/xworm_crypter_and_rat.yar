@@ -6,7 +6,7 @@ rule XWorm_NET_Crypter_PBKDF2
         description = "Detects .NET crypter using PBKDF2/AES-128-CBC with embedded encrypted payloads"
         author = "Tao Goldi"
         date = "2026-04"
-        version = 1
+        version = 2
         sha256 = "27a2505cfd32ca1fda31e58c1d2ddee7e4726b8305fda10b779851e259a2ef9d"
         severity = "critical"
         family = "XWorm Crypter"
@@ -26,10 +26,10 @@ rule XWorm_NET_Crypter_PBKDF2
     condition:
         uint16(0) == 0x5A4D and
         pe.imports("mscoree.dll") and
-        (
-            ($salt and $iv) or
-            ($pbkdf2 and $crypto and $stream and $b64 and $res and $asm)
-        )
+        // v2: the six .NET crypto API names alone matched most .NET RATs (Quasar, AsyncRAT, njRAT) and
+        // benign installers; they now only support the variant's own salt and IV
+        $salt and $iv and
+        4 of ($pbkdf2, $crypto, $stream, $b64, $res, $asm)
 }
 
 rule XWorm_RAT_v1_LEB128
@@ -38,7 +38,7 @@ rule XWorm_RAT_v1_LEB128
         description = "Detects XWorm RAT with LEB128 protocol, D/Invoke, and AMSI/ETW bypass"
         author = "Tao Goldi"
         date = "2026-04"
-        version = 1
+        version = 2
         severity = "critical"
         family = "XWorm"
         mitre_attack = "T1055,T1547,T1562.001,T1059.001,T1548.002"
@@ -56,8 +56,6 @@ rule XWorm_RAT_v1_LEB128
         $dinv3 = "GetExportAddress" ascii wide
 
         // AMSI/ETW bypass
-        $amsi1 = "AmsiScanBuffer" ascii wide
-        $amsi2 = "EtwEventWrite" ascii wide
         $amsi3 = "AsmiAndETW" ascii wide
 
         // XWorm-specific class names
@@ -90,7 +88,7 @@ rule XWorm_RAT_AdvancedBootkit
         description = "Detects XWorm variant with UEFI bootkit, rootkit, and driver infection capabilities"
         author = "Tao Goldi"
         date = "2026-04"
-        version = 1
+        version = 2
         severity = "critical"
         family = "XWorm"
         mitre_attack = "T1542.003,T1014,T1068"
@@ -116,7 +114,9 @@ rule XWorm_RAT_AdvancedBootkit
         pe.imports("mscoree.dll") and
         (
             2 of ($boot*) or
-            2 of ($root*) or
+            // v2: the r77 rootkit DLL names alone are the public r77 project, bundled by many
+            // .NET RATs (mostly Quasar builds); they count only beside the driver infector
+            (2 of ($root*) and 1 of ($drv*)) or
             (1 of ($boot*) and 1 of ($root*) and 1 of ($drv*))
         )
 }
@@ -127,7 +127,7 @@ rule XWorm_RAT_Config_Superiority
         description = "Detects this specific XWorm build with 'Superiority' campaign tag"
         author = "Tao Goldi"
         date = "2026-04"
-        version = 1
+        version = 2
         sha256_payload = "710e3226b214aa6d3ab65bb3d8899ea533bdfc6da28602328c5912567c9bcf0c"
         severity = "critical"
         family = "XWorm"
@@ -140,7 +140,6 @@ rule XWorm_RAT_Config_Superiority
         $group = "Superiority" ascii wide
         $task = "Windows Perfoment Host" ascii wide
         $reg = "gogoduck" ascii wide
-        $amd = "AMD drivers/software" ascii wide
 
     condition:
         uint16(0) == 0x5A4D and

@@ -6,7 +6,7 @@ rule QuasarRAT_CustomLoader_ByteCipher
         description = "Detects the custom native x64 loader that decrypts Quasar RAT using byte-swap + SUB + XOR + ROR cipher"
         author = "Tao Goldi"
         date = "2026-04"
-        version = 1
+        version = 2
         sha256 = "58c0f6f8f34d79ea67065761fd2bfc32101c1611cb7d16f5c15f8c19f8572e65"
         severity = "critical"
         family = "Quasar Loader"
@@ -31,9 +31,6 @@ rule QuasarRAT_CustomLoader_ByteCipher
         // .fptable section name (characteristic of this loader family)
         $fptable = ".fptable" ascii
 
-        // ShellExecuteA import
-        $shell = "ShellExecuteA" ascii
-
     condition:
         uint16(0) == 0x5A4D and filesize > 2MB and filesize < 10MB and
         (
@@ -49,7 +46,7 @@ rule QuasarRAT_v141_Payload
         description = "Detects Quasar RAT v1.4.1 payload with CJK-obfuscated class names"
         author = "Tao Goldi"
         date = "2026-04"
-        version = 1
+        version = 2
         sha256 = "6bb333f45cbb5db45f63379e81b737956804cdde4b436e81612da722d7c9a725"
         severity = "critical"
         family = "Quasar RAT"
@@ -71,7 +68,9 @@ rule QuasarRAT_v141_Payload
         pe.imports("mscoree.dll") and
         (
             (2 of ($quasar*)) or
-            ($salt and $iterations) or
+            // v2: AsyncRAT copied Quasar's Aes256 class (same salt and iteration count), so the
+            // key-derivation constants need a Quasar name beside them
+            ($salt and $iterations and 1 of ($quasar*)) or
             ($quasar1 and $salt)
         )
 }

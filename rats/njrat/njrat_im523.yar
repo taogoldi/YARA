@@ -6,7 +6,7 @@ rule njRAT_im523_HacKed_Campaign
         description = "Detects njRAT v0.7d im523 variant with 'HacKed' campaign tag"
         author = "Tao Goldi"
         date = "2026-04"
-        version = 1
+        version = 2
         sha256 = "ff87cd932e25b024cd10042c186f252fdabdac2c4d4cbc67f89e457697ebbc71"
         severity = "critical"
         family = "njRAT"
@@ -46,15 +46,6 @@ rule njRAT_im523_HacKed_Campaign
 
         // USB spread
         $usb = "autorun.inf" ascii wide
-        $usb2 = "shellexecute=" ascii wide
-
-        // Credential theft
-        $cred = "Pass.exe" ascii wide
-
-        // Analysis tool detection
-        $tool1 = "processhacker" ascii wide
-        $tool2 = "processviewer" ascii wide
-        $tool3 = "process explorer" ascii wide
 
     condition:
         uint16(0) == 0x5A4D and filesize < 100KB and

@@ -48,7 +48,7 @@ rule PulsarRAT_Browser_Stealer
         description = "Detects Pulsar RAT browser credential harvesting module"
         author = "Tao Goldi"
         date = "2026-04"
-        version = 1
+        version = 2
         severity = "critical"
         family = "PulsarRAT"
         mitre_attack = "T1555,T1539"
@@ -64,12 +64,10 @@ rule PulsarRAT_Browser_Stealer
 
         // DPAPI decryption
         $dpapi = "DecryptBlob" ascii wide
-        $dpapi2 = "encrypt data using DPAPI" ascii wide
 
         // Key browser data targets
         $login_data = "Login Data" ascii wide
         $logins_json = "logins.json" ascii wide
-        $cookies = "Cookies" ascii wide
 
     condition:
         uint16(0) == 0x5A4D and
@@ -87,7 +85,7 @@ rule PulsarRAT_AntiAnalysis
         description = "Detects Pulsar RAT anti-analysis and evasion routines"
         author = "Tao Goldi"
         date = "2026-04"
-        version = 1
+        version = 2
         severity = "high"
         family = "PulsarRAT"
         mitre_attack = "T1497,T1562.001"
@@ -106,9 +104,6 @@ rule PulsarRAT_AntiAnalysis
         $uac1 = "DoDisableUAC" ascii wide
         $uac2 = "DoEnableUAC" ascii wide
 
-        // Registry-based defense disabling
-        $reg_disable = "disable system features via registry" ascii wide
-
     condition:
         uint16(0) == 0x5A4D and
         (
@@ -125,7 +120,7 @@ rule PulsarRAT_Keylogger_Screenshot
         description = "Detects Pulsar RAT collection capabilities (keylogger + screenshot)"
         author = "Tao Goldi"
         date = "2026-04"
-        version = 1
+        version = 2
         severity = "high"
         family = "PulsarRAT"
         mitre_attack = "T1056.001,T1113,T1115"
@@ -150,12 +145,11 @@ rule PulsarRAT_Keylogger_Screenshot
 
     condition:
         uint16(0) == 0x5A4D and
+        // v2: "Pulsar" and the Win32 API names are common words; at least two of Pulsar's
+        // own command descriptions must be present
         $pulsar_ctx and
-        (
-            (2 of ($keylog*) and 1 of ($screen*)) or
-            (2 of ($screen*) and $clip1) or
-            (1 of ($keylog*) and 1 of ($screen*) and $clip1)
-        )
+        2 of ($keylog1, $screen1, $clip1) and
+        1 of ($keylog2, $keylog3, $keylog4, $screen2, $screen3)
 }
 
 rule PulsarRAT_Generic

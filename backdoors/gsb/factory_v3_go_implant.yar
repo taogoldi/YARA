@@ -34,17 +34,11 @@ rule Factory_v3_Go_Implant_NuclearDecoy
         // Go build ID pattern
         $gobuild = "Go build ID:" ascii
 
-        // Dynamic API resolution via LazyDLL
-        $lazy1 = "syscall.modkernel32" ascii
-        $lazy2 = "syscall.modadvapi32" ascii
-
-        // Go version string
-        $gover = "go1.24" ascii
-
     condition:
         uint16(0) == 0x5A4D and filesize < 5MB and
         (
-            ($builder) or
+            // the build path alone is Factory-v3_Builder_Path below: the builder also wraps
+            // other families (Vidar, Smoke Loader), so on its own it is not this implant
             ($builder and 3 of ($nuke*)) or
             (4 of ($nuke*) and 2 of ($cjk*)) or
             (2 of ($cjk*) and $gobuild and 3 of ($nuke*))
@@ -83,4 +77,23 @@ rule Factory_v3_Go_Implant_Generic
         uint16(0) == 0x5A4D and
         5 of ($n*) and
         1 of ($go*)
+}
+
+rule Factory_v3_Builder_Path
+{
+    meta:
+        description = "Go binary built with the Factory-v3 builder (build path left in the binary). The builder wraps several families: seen around Vidar and Smoke Loader as well as the nuclear-decoy implant, so this names the builder, not a payload family"
+        author = "Tao Goldi"
+        date = "2026-11"
+        version = 1
+        severity = "medium"
+        family = "Factory-v3 builder"
+
+    strings:
+        $builder = "Factory-v3/builder/temp/" ascii
+        $gobuild = "Go build ID:" ascii
+
+    condition:
+        uint16(0) == 0x5A4D and filesize < 5MB and
+        $builder and $gobuild
 }
