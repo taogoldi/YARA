@@ -19,7 +19,7 @@ Rules are organised by malware class, then family: `<class>/<family>/<rule>.yar`
 | `hvnc/` | StudioSecGhost hidden-VNC agent |
 | `injectors/` | PoolParty thread-pool injection patterns |
 | `loaders/` | Moonshine loader (in `animateclipper/`, with the AnimateClipper Go dropper), FUD Crypt (test payload, VerShadow), GuLoader NSIS installer and dropped padding, GCleaner*, SmokeLoader* |
-| `ransomware/` | Bisamware, Crytox, Dagon Locker (packed and unpacked) |
+| `ransomware/` | Bisamware, Crytox, Dagon Locker (packed and unpacked), INC Linux/ESXi encryptor (Rust generation, eight architectures) |
 | `rats/` | AsyncRAT*, DcRAT build, NanoCore*, njRAT im523 and njRAT*, Pulsar, Quasar native loader, Remcos*, VioletRAT v6, XWorm crypter and RAT |
 | `stealers/` | Amadey cred64 and Amadey*, CloudSyncD (macOS fake installer and stager), IRoveroll, Pony/Fareit, Pulsar, Raccoon v2, SnakeKeylogger*, Vidar-like stage 1/2 and Vidar* |
 
