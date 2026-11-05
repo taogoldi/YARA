@@ -99,20 +99,24 @@ rule Linux_Mirai_ENS_Drunkasfk_C2_Resolver
 rule Linux_Mirai_ENS_DvrBot_March_C2_Resolver
 {
     meta:
-        description = "Mirai-based DVR bot, March to July 2026 builds: asks the ENS public resolver directly for a text record of the form 2001:db8:AABB:CCDD::1 and XORs the four bytes with 0xA5; the name sits in a modified-RC4 string table"
+        description = "Mirai-based DVR bot, March to July 2026 builds: builds its eth_call by concatenation and asks the ENS public resolver directly for a text record of 2001:db8:AABB:CCDD::1 entries (bytes XOR 0xA5, later nibble-swapped, rotated and keyed); names sit in one of four string protections"
         author = "Tao Goldi"
         date = "2026-11-05"
-        version = "1.0"
+        version = "1.1"
         family = "Mirai"
         sha256 = "d6b7bb3baba4a7a97d0fab24faa2165ca4f658a87447761321c77b8cda841a97"
+        sha256_2 = "05538877966b9357ca89234a9bdf23725878ae0b1fc59ada7f09e182662fd66d"
+        sha256_3 = "6ca41e94a25129be2ceb7e800cf26a333433e4214fba40465645c9159de77015"
+        sha256_4 = "c3457390026b6cc4690310f0af06c0a50da4941881ef3d8defab8ad15474d5ed"
     strings:
         $t1 = "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"eth_call\",\"params\":[{\"to\":\"\x00" ascii
         $t2 = "\",\"data\":\"\x00" ascii
-        $resolver = "0xf29100983e058b709f3d539b0c765937b804ac15\x00" ascii
-        $ip = "%u.%u.%u.%u\x00" ascii
         $res = "\"result\":\"0x" ascii
+        $resolver = "0xf29100983e058b709f3d539b0c765937b804ac15\x00" ascii
+        $nodes = "/nodes?key=" ascii
+        $other = "drunkasfk" ascii
     condition:
-        uint32(0) == 0x464c457f and filesize < 4MB and all of them
+        uint32(0) == 0x464c457f and filesize < 4MB and $t1 and $t2 and $res and ($resolver or $nodes) and not $other
 }
 
 rule Linux_Mirai_ENS_DvrBot_July_C2_Resolver
