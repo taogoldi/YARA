@@ -62,10 +62,10 @@ rule Linux_Bot_ENS_ProxyIps_C2_Resolver
 rule Linux_Mirai_ENS_IpRecords_C2_Resolver
 {
     meta:
-        description = "Mirai/Gafgyt-based DVR bot that reads plain IPv4 text records (ip, ip2 .. ip14) of an ENS name; name, RPC hosts and record keys sit in a ChaCha20 string table"
+        description = "Mirai/Gafgyt-based DVR bot that reads IPv4 text records (ip, ip2 .. ip14) of an ENS name and swaps their two halves (record C.D.A.B is host A.B.C.D); name, RPC hosts and record keys sit in a ChaCha20 string table"
         author = "Tao Goldi"
         date = "2026-11-05"
-        version = "1.0"
+        version = "1.1"
         family = "Mirai"
         sha256 = "3461b097ea026c9161113f0f590e75c47908cebd3d6a30de3b821c10a85ea9fc"
     strings:

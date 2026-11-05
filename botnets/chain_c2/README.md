@@ -14,7 +14,7 @@ All of these build the `eth_call` request by hand, with a format string or by co
 | `Linux_Mirai_ENS_Ouroboros_C2_Resolver` | `mirai_ens_c2_resolvers.yar` | ENS text record `ouroboros`: `::ffff:x:x:x`, six bytes XOR `0xDE` = IPv4 and port |
 | `Linux_Mirai_ENS_Rc4_TextRecord_C2_Resolver` | `mirai_ens_c2_resolvers.yar` | ENS text record `your_public_ip`: a dotted quad that is RC4-encrypted with the key `GET/dlr.`; names in an RC4 string table. A later form asks the ENS universal resolver |
 | `Linux_Bot_ENS_ProxyIps_C2_Resolver` | `mirai_ens_c2_resolvers.yar` | ENS text record `proxy.ips` of a hard-coded node: a plain comma-separated IPv4 list |
-| `Linux_Mirai_ENS_IpRecords_C2_Resolver` | `mirai_ens_c2_resolvers.yar` | DVR bot: ENS text records `ip`, `ip2` .. `ip14`, plain IPv4; name and keys in a ChaCha20 string table |
+| `Linux_Mirai_ENS_IpRecords_C2_Resolver` | `mirai_ens_c2_resolvers.yar` | DVR bot: ENS text records `ip`, `ip2` .. `ip14`, IPv4 with the two halves swapped; name and keys in a ChaCha20 string table |
 | `Linux_Mirai_ENS_Drunkasfk_C2_Resolver` | `mirai_ens_c2_resolvers.yar` | Build marker `drunkasfk`: request built by concatenation, ENS text record `woah` |
 | `Linux_Kimwolf_ENS_Addr_C2_Resolver` | `kimwolf_ens_c2.yar` | Kimwolf: ENS address record, last four bytes XOR `93 14 17 15` = IPv4; strings in a per-entry xorshift table |
 | `SUSP_ELF_ENS_Registry_Lookup` | `mirai_ens_c2_resolvers.yar` | Heuristic: small ELF with an `eth_call` request and either the ENS registry address plus the `resolver(bytes32)` selector, or the ENS public resolver address |
@@ -33,7 +33,7 @@ would match them if they were built the same way; none did in the sets below.
 | Ouroboros | Ethereum | `text(node, "ouroboros")` | hextets a:b:c, bytes XOR `0xDE`, 4 bytes IPv4 + 2 bytes port |
 | RC4 text record | Ethereum | `text(node, "your_public_ip")` | 4 bytes RC4 with `GET/dlr.` (the string table uses RC4 with an XOR swap, which zeroes a cell when i equals j) |
 | proxy.ips | Ethereum | `text(node, "proxy.ips")` | none; the same node also holds `proxy.port`, `bin.base` and `gen` |
-| ip records | Ethereum | `text(node, "ip")` .. `"ip14"` | none |
+| ip records | Ethereum | `text(node, "ip")` .. `"ip14"` | the two halves of the dotted quad are swapped: record `C.D.A.B` is host `A.B.C.D`. The bot does the same to the A records of its fallback domains |
 | Kimwolf | Ethereum | `addr(node)` | last 4 bytes XOR `93 14 17 15` |
 | Drunkasfk | Ethereum | `text(node, "woah")` | `[a:b:c:d::e:f|...]:port`, a list of IPv6-looking entries whose last 32 bits carry the address; the transform was not recovered |
 | Vibenet (one sample, covered by the heuristics only) | Ethereum | `text(node, "description")`, `"meow"` | base64 of a comma-separated IPv4 list |
@@ -46,9 +46,9 @@ would match them if they were built the same way; none did in the sets below.
 | Boatnet 1.2.x+ | Polygon `0x5D5abC33a4e5C602a002815d93806b204324D1a1` | 21 updates 2026-09-15 to 2026-11-03; current `80[.]87[.]206[.]91`, `.95`, `.86` on 443, `85[.]137[.]54[.]178:443` |
 | Akuma | Polygon `0x084a379b1E18c153212015bCCD60295C948EaAe2` | `191[.]217[.]203[.]232:25565` |
 | Ouroboros | `bossmen[.]eth` | 2026-09-21 `176[.]65[.]139[.]158:45678`; from 2026-09-22 `201[.]7[.]16[.]231:11121` (54887 for 18 minutes) |
-| RC4 text record | `chinkon[.]eth` (C2), `infectedchink[.]eth` (scan ranges and loader, port 80) | 2026-10-10 `176[.]65[.]139[.]40`; 2026-10-15 `45[.]90[.]163[.]37`; from 2026-10-16 `185[.]228[.]72[.]128` (C2) and `130[.]12[.]46[.]145` (loader) |
+| RC4 text record | `chinkon[.]eth` (C2), `infectedchink[.]eth` (scan ranges and loader, port 80) | 2026-10-10 `176[.]65[.]139[.]40`; 2026-10-15 the loader record decoded to `45[.]90[.]163[.]37` for two minutes and then to `202[.]42[.]45[.]124` for 20 hours (the two are each other's RC4 image, so one was written unencrypted); from 2026-10-16 `185[.]228[.]72[.]128` (C2) and `130[.]12[.]46[.]145` (loader) |
 | proxy.ips | node `0xdaa10029263ba2403b2e3a338719ec43cc30a2ce3ed3842207890c2d0d0eecf0` | 2026-10-23 `185[.]95[.]231[.]143`, `91[.]92[.]46[.]91`, `83[.]171[.]227[.]116`, `135[.]136[.]27[.]193`, port 443; `bin.base` `hxxp://elliotsdog[.]ru/bins/` |
-| ip records | `catswithhatslolksjhakf[.]eth`; fallback hosts `dvrs`, `dvrs2`, `dvrs4` under `botlesscucks[.]st` | `49[.]6[.]172[.]233` since 2026-09-11 |
+| ip records | `catswithhatslolksjhakf[.]eth` (September builds), `dumbfuckerslol[.]eth` (August builds); fallback hosts under `botlesscucks[.]st`, `potassium[.]st`, `leandro[.]st` | `catswithhatslolksjhakf`: record `49.6.172.233` since 2026-09-11, which is host `172[.]233[.]49[.]6`. `dumbfuckerslol`: twelve records, hosts `89[.]185[.]82[.]69`, `91[.]92[.]242[.]19`, `45[.]95[.]232[.]146`, `45[.]142[.]31[.]186`, `87[.]251[.]69[.]139`, `31[.]56[.]19[.]70` to `.75` and `.111` |
 | Drunkasfk | `2busydrinkingcodeine[.]eth` (plain in the August builds, hidden later) | registered 2026-07-29; 157 updates 2026-07-30 to 2026-10-26; resolver cleared and the name transferred on 2026-10-27, so these bots no longer resolve |
 | Kimwolf | `pawsatyou[.]eth`; in the binary `176[.]65[.]139[.]210`, `65[.]109[.]18[.]44`, `report[.]kimwolf[.]net` | the address record holds the owner's own wallet, which decodes to no real server |
 | Vibenet | `fuckmepls[.]eth` | 2026-08-24 `201[.]7[.]23[.]8`, `.9`; 2026-09-01 adds `.254`, `.255`; 2026-09-15 `217[.]60[.]242[.]252`, `.253`; 2026-10-03 adds `.79`, `.80` |
