@@ -96,6 +96,43 @@ rule Linux_Mirai_ENS_Drunkasfk_C2_Resolver
         uint32(0) == 0x464c457f and filesize < 4MB and all of them
 }
 
+rule Linux_Mirai_ENS_DvrBot_March_C2_Resolver
+{
+    meta:
+        description = "Mirai-based DVR bot, March to July 2026 builds: asks the ENS public resolver directly for a text record of the form 2001:db8:AABB:CCDD::1 and XORs the four bytes with 0xA5; the name sits in a modified-RC4 string table"
+        author = "Tao Goldi"
+        date = "2026-11-05"
+        version = "1.0"
+        family = "Mirai"
+        sha256 = "d6b7bb3baba4a7a97d0fab24faa2165ca4f658a87447761321c77b8cda841a97"
+    strings:
+        $t1 = "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"eth_call\",\"params\":[{\"to\":\"\x00" ascii
+        $t2 = "\",\"data\":\"\x00" ascii
+        $resolver = "0xf29100983e058b709f3d539b0c765937b804ac15\x00" ascii
+        $ip = "%u.%u.%u.%u\x00" ascii
+        $res = "\"result\":\"0x" ascii
+    condition:
+        uint32(0) == 0x464c457f and filesize < 4MB and all of them
+}
+
+rule Linux_Mirai_ENS_DvrBot_July_C2_Resolver
+{
+    meta:
+        description = "Mirai-based DVR bot, July to August 2026 builds: reads the ENS text records ipv4 and telnet (plain addresses) and also resolves Solana names; names, record keys and RPC hosts sit in a modified-RC4 string table"
+        author = "Tao Goldi"
+        date = "2026-11-05"
+        version = "1.0"
+        family = "Mirai"
+        sha256 = "1de6220fc4c3502a55fa5cc220b9a91cead25fc34bc7d3610edf1914f83bc379"
+    strings:
+        $t = "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"eth_call\",\"params\":[{\"to\":\"%s\",\"data\":\"%s\"},\"latest\"]}" ascii
+        $alphabet = "abcdefghijklmnopqrstuvw012345678" ascii
+        $selector = "0x0178b8bf\x00" ascii
+        $registry = "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e" ascii
+    condition:
+        uint32(0) == 0x464c457f and filesize < 4MB and all of them
+}
+
 rule SUSP_ELF_ENS_Registry_Lookup
 {
     meta:
