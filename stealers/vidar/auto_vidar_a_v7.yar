@@ -16,6 +16,8 @@ rule AUTO_vidar_a_v7 {
       validation_other_families = 332
       validation_other_family_hits = 0
       validation_heldout_hits = "3 of 60"
+      live_precision = "0.95 over 19 matches"
+      live_measured = "2026-11-05"
       hash1 = "22ca5beb951a2a6b69edc57a88f753c71951fb3d5b2f027be7fd698b85239058"
       hash2 = "4257e836bc6a87e4b17724c157ba8f14646c7816aa5834e6ff6d84f6686ca556"
       hash3 = "dcc2de9a387102f876834661c9328bacd36f28f41857f963e880ada0eed0f78a"
