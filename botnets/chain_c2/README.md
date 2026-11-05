@@ -1,6 +1,6 @@
 # Linux bots that keep their C2 on a blockchain
 
-Twelve rules (2026-11-05) for Linux bots that do not carry a usable C2 address. Each one asks a public JSON-RPC
+Thirteen rules (2026-11-05) for Linux bots that do not carry a usable C2 address. Each one asks a public JSON-RPC
 endpoint for a value its operator can change at will: a smart contract's storage on Polygon, or a record of an
 Ethereum Name Service (ENS) name. Taking down a server does not help, because the operator writes a new address to
 the chain and every bot picks it up. A sandbox with no route out never sees the C2 either; it only sees the lookups.
@@ -18,6 +18,7 @@ All of these build the `eth_call` request by hand, with a format string or by co
 | `Linux_Mirai_ENS_DvrBot_March_C2_Resolver` | `mirai_ens_c2_resolvers.yar` | The same DVR bot, March to July 2026: builds the request by concatenation and asks the ENS public resolver directly; text record of `2001:db8:AABB:CCDD::1` entries |
 | `Linux_Mirai_ENS_DvrBot_July_C2_Resolver` | `mirai_ens_c2_resolvers.yar` | The same DVR bot, July to August 2026: ENS text records `ipv4` and `telnet`, plain; also resolves Solana names |
 | `Linux_Mirai_ENS_Drunkasfk_C2_Resolver` | `mirai_ens_c2_resolvers.yar` | Build marker `drunkasfk`: request built by concatenation, ENS text record `woah` |
+| `Linux_Earnify_ENS_Announcement_C2_Resolver` | `earnify_ens_c2.yar` | Earnify, a Rust bot presented as a bandwidth-sharing client and Android SDK: ENS text record `proof` holding a ChaCha20-Poly1305 encrypted server announcement |
 | `Linux_Kimwolf_ENS_Addr_C2_Resolver` | `kimwolf_ens_c2.yar` | Kimwolf: ENS address record, last four bytes XOR `93 14 17 15` = IPv4; strings in a per-entry xorshift table |
 | `SUSP_ELF_ENS_Registry_Lookup` | `mirai_ens_c2_resolvers.yar` | Heuristic: small ELF with an `eth_call` request and either the ENS registry address plus the `resolver(bytes32)` selector, or the ENS public resolver address |
 | `SUSP_ELF_EthCall_C2_Resolver` | `susp_elf_eth_call_c2.yar` | Heuristic: any ELF under 10 MB with a hand-built `eth_call` request |
@@ -39,7 +40,11 @@ name, the record and the string protection, which changed with almost every rele
 | July, August (`meower`) | the March table again |
 | August, September | ChaCha20 |
 
-In every one of them each string restarts the keystream, so a table reads by sliding the keystream over the
+Earnify's later builds do something simpler still: every string is XORed with the low bytes of an unseeded
+SplitMix64 sequence, the same in every build, so its masked name and key are fixed byte strings (they are in the
+rule).
+
+In every one of the DVR bot's tables each string restarts the keystream, so a table reads by sliding the keystream over the
 constants once the key is found. The same property opens the later Drunkasfk table without its cipher: the
 ciphertext of the name the earlier builds showed, XORed with that name, is the keystream.
 
@@ -52,6 +57,8 @@ ciphertext of the name the earlier builds showed, XORed with that name, is the k
 | RC4 text record | Ethereum | `text(node, "your_public_ip")` | 4 bytes RC4 with `GET/dlr.` (the string table uses RC4 with an XOR swap, which zeroes a cell when i equals j) |
 | proxy.ips | Ethereum | `text(node, "proxy.ips")` | none; the same node also holds `proxy.port`, `bin.base` and `gen` |
 | ip records | Ethereum | `text(node, "ip")` .. `"ip14"` | the two halves of the dotted quad are swapped: record `C.D.A.B` is host `A.B.C.D`. The bot does the same to the A records of its fallback domains |
+| Earnify | Ethereum | `text(node, "proof")` | base64 of nonce (12) + ChaCha20-Poly1305 ciphertext + tag, key a 32-character phrase in the binary; the plaintext lists servers, a version, update URLs and hashes per platform as length-prefixed strings |
+| rustobot (one sample, read by hand) | Ethereum | `text(node, "wog")` | none |
 | Kimwolf | Ethereum | `addr(node)` | last 4 bytes XOR `93 14 17 15` |
 | DVR bot, March | Ethereum | `text(node, "k1er4n")`, asked of the public resolver | `2001:db8:AABB:CCDD::1`, the four bytes XOR `0xA5` |
 | DVR bot, late March to May | Ethereum | `text(node, "ipv6")` | a list of such entries separated by a vertical bar, bytes XOR `0xA5`; the bot picks one at random |
@@ -75,6 +82,8 @@ ciphertext of the name the earlier builds showed, XORed with that name, is the k
 | DVR bot, late March to July | `ukranianhorseriding[.]eth`, from July also `burrberry[.]eth`; Solana name `24carnforth2merseyside[.]sol`; `wow` and `jerusalem` under `androiddebugbridge[.]su` and loader `185[.]244[.]182[.]35` in the binary | `network` changed 14 times from 2026-07-06 to 2026-08-01 (49 addresses, mostly in `152[.]32`, `101[.]36`, `128[.]14`, `43[.]133`, `172[.]232`). On 2026-08-01 every record of both names was cleared and a farewell `message` record written. On 2026-10-27 both names lost their resolver and passed to `0xda021a2c1c2f99574d861ef8c6fa745851beb7f6`, as `2busydrinkingcodeine[.]eth` did the same day |
 | DVR bot, July | `meower[.]eth`; Solana names `roanoke[.]sol`, `telnet[.]sol`; loader `deformed[.]su:9018`, `nvms9000[.]online` in the binary | 2026-07-17 `172[.]233[.]124[.]230`, `45[.]154[.]98[.]115`, telnet record `205[.]237[.]110[.]232`; since 2026-07-24 the records read `I took it down now im sorry` and `no more botnet` |
 | Drunkasfk | `2busydrinkingcodeine[.]eth`, plain in the first August builds and in an encrypted table afterwards | registered 2026-07-29; 157 values from 2026-07-30 to 2026-10-26, 304 distinct addresses, up to 20 per value. They overlap the DVR bot's ranges (`77[.]232`, `91[.]142`, `172[.]233`, `185[.]244`), so this is the same operator's next bot. Last value, 2026-10-26, twenty addresses including `178[.]128[.]223[.]92`, `43[.]159[.]46[.]155`, `43[.]156[.]101[.]228`, `164[.]92[.]166[.]123`, `68[.]183[.]183[.]60`. Resolver cleared and the name transferred on 2026-10-27, so these bots no longer resolve |
+| Earnify | `russianaltushkawantsdickinside[.]eth`; updates under `earnify[.]su`, earlier `empty-violet-63e1[.]maskify[.]workers[.]dev` | 39 announcements since 2026-04-05, all under one key. Servers: `84[.]21[.]189[.]244:4433` (2026-04-05), `158[.]94[.]208[.]131:4433` (2026-04-06 to 08-07), `62[.]60[.]226[.]74:7777` (from 2026-08-28, current) |
+| rustobot | `rustobot[.]eth` | `93[.]152[.]221[.]110`, set once on 2026-09-07 |
 | Kimwolf | `pawsatyou[.]eth`; in the binary `176[.]65[.]139[.]210`, `65[.]109[.]18[.]44`, `report[.]kimwolf[.]net` | the address record holds the owner's own wallet, which decodes to no real server |
 | Vibenet | `fuckmepls[.]eth` | 2026-08-24 `201[.]7[.]23[.]8`, `.9`; 2026-09-01 adds `.254`, `.255`; 2026-09-15 `217[.]60[.]242[.]252`, `.253`; 2026-10-03 adds `.79`, `.80` |
 
@@ -84,10 +93,10 @@ All live names resolve through the ENS public resolver `0xF29100983E058b709F3D53
 
 | Set | Result |
 |---|---|
-| Malware corpus, text search for `"method":"eth_call"` over 457,428 files: 413 ELF | Named by a family rule: 382 (Boatnet 67, Akuma 28, Ouroboros 72, RC4 text record 17, proxy.ips 9, ip records 12, DVR bot March to July 57, DVR bot July-August 62, Drunkasfk 47, Kimwolf 11). All 413 matched `SUSP_ELF_EthCall_C2_Resolver`; 202 matched `SUSP_ELF_ENS_Registry_Lookup` |
-| Same search, the 31 ELF matched by the heuristics only | Rust bots (24); Vibenet (1); six others |
-| Benign software set (49,633 files) | 0 matched, all twelve rules |
-| Clean ELF: a benign software set (14,698) and a Debian system image (1,603) | 0 matched, all twelve rules |
+| Malware corpus, text search for `"method":"eth_call"` over 457,428 files: 413 ELF | Named by a family rule: 403 (Boatnet 67, Akuma 28, Ouroboros 72, RC4 text record 17, proxy.ips 9, ip records 12, DVR bot March to July 57, DVR bot July-August 62, Drunkasfk 47, Earnify 21, Kimwolf 11). All 413 matched `SUSP_ELF_EthCall_C2_Resolver`; 202 matched `SUSP_ELF_ENS_Registry_Lookup` |
+| Same search, the 10 ELF matched by the heuristics only | Vibenet (1), rustobot (1), a larger Rust bot whose configuration was not recovered (2), six others |
+| Benign software set (49,633 files) | 0 matched, all thirteen rules |
+| Clean ELF: a benign software set (14,698) and a Debian system image (1,603) | 0 matched, all thirteen rules |
 
 Bazaar labels most of these samples Mirai, including Boatnet. UPX-packed copies match after unpacking only.
 
@@ -102,5 +111,7 @@ Reference samples:
 - DVR bot, March: `d6b7bb3baba4a7a97d0fab24faa2165ca4f658a87447761321c77b8cda841a97`; late March: `05538877966b9357ca89234a9bdf23725878ae0b1fc59ada7f09e182662fd66d`; May: `6ca41e94a25129be2ceb7e800cf26a333433e4214fba40465645c9159de77015`; July, second name: `c3457390026b6cc4690310f0af06c0a50da4941881ef3d8defab8ad15474d5ed`
 - DVR bot, July: `1de6220fc4c3502a55fa5cc220b9a91cead25fc34bc7d3610edf1914f83bc379`
 - Drunkasfk: `369194a0cfbe5f3524dbe1f3f9726547cbe6bc62a266e8c07e3f14409c78a621`
+- Earnify: `37bdcdb26c04c38ee4c123fd986dc0f8c0449fc8456fe25dd7f4fd9d0a1c8d7f` (plain strings), `a4e560c61861c4c3d6d614217d93f38fadea8ee6b127ccd85618ff4312582600` (masked strings)
+- rustobot: `21a58deb2557cb9cf07a673820239b0577be33f0bd0f2ddb7e61a0f16003e8dc`
 - Kimwolf: `25418594755f57298e0f0c81a91205c28c0af91709af755e919d4b896ccce212`
 - Vibenet: `5002282edb86e86fd7d7eedd8b3bd2444390eec0d18e93641d23c89cdba1f9ef`
