@@ -79,10 +79,10 @@ rule Linux_Mirai_ENS_IpRecords_C2_Resolver
 rule Linux_Mirai_ENS_Drunkasfk_C2_Resolver
 {
     meta:
-        description = "Mirai-based bot with the build marker 'drunkasfk': builds its eth_call request by concatenation and resolves an ENS name (2busydrinkingcodeine.eth in the August 2026 builds, hidden later)"
+        description = "Mirai-based bot with the build marker 'drunkasfk': builds its eth_call request by concatenation and reads the ENS text record woah of 2busydrinkingcodeine.eth (plain in the first August 2026 builds, in an encrypted table later); the last eight hex digits of each IPv6-looking entry XOR 6B 9E 3F 2A are the C2 address"
         author = "Tao Goldi"
         date = "2026-11-05"
-        version = "1.0"
+        version = "1.1"
         family = "Mirai"
         sha256 = "369194a0cfbe5f3524dbe1f3f9726547cbe6bc62a266e8c07e3f14409c78a621"
         sha256_2 = "8e3df94a5ee61add57686c5939b1173aefa8be5814b0e76aec69cbf133cbd53d"

@@ -40,7 +40,8 @@ name, the record and the string protection, which changed with almost every rele
 | August, September | ChaCha20 |
 
 In every one of them each string restarts the keystream, so a table reads by sliding the keystream over the
-constants once the key is found.
+constants once the key is found. The same property opens the later Drunkasfk table without its cipher: the
+ciphertext of the name the earlier builds showed, XORed with that name, is the keystream.
 
 | Build | Chain | Where | Decoding |
 |---|---|---|---|
@@ -56,7 +57,7 @@ constants once the key is found.
 | DVR bot, late March to May | Ethereum | `text(node, "ipv6")` | a list of such entries separated by a vertical bar, bytes XOR `0xA5`; the bot picks one at random |
 | DVR bot, May to July | Ethereum, Solana | `text(node, "network")`; from July also `text(node, "node")`, an address asked for a node list | the same entries, each byte nibble-swapped, rotated right by its index plus one, then XORed with and added to the matching byte of `0x80408454` |
 | DVR bot, July | Ethereum, Solana | `text(node, "ipv4")`, `text(node, "telnet")`; `.sol` names through an SNS proxy | none; addresses separated by a vertical bar |
-| Drunkasfk | Ethereum | `text(node, "woah")` | `[a:b:c:d::e:f|...]:port`, a list of IPv6-looking entries whose last 32 bits carry the address; the transform was not recovered |
+| Drunkasfk | Ethereum | `text(node, "woah")` | `[a:b:c:d::e:f|...]:port`, a list of IPv6-looking entries. The last eight hex digits of an entry XOR `6B 9E 3F 2A` are the IPv4 address; the August x86 build connects on 443 whatever the port in the record |
 | Vibenet (one sample, covered by the heuristics only) | Ethereum | `text(node, "description")`, `"meow"` | base64 of a comma-separated IPv4 list |
 
 ## Indicators (read 2026-11-05, defanged)
@@ -73,7 +74,7 @@ constants once the key is found.
 | DVR bot, March | `m3rnbvs5d[.]eth`; `kieron[.]androiddebugbridge[.]su` in the binary | retired: the record now reads `one two seven . zero . zero . one` |
 | DVR bot, late March to July | `ukranianhorseriding[.]eth`, from July also `burrberry[.]eth`; Solana name `24carnforth2merseyside[.]sol`; `wow` and `jerusalem` under `androiddebugbridge[.]su` and loader `185[.]244[.]182[.]35` in the binary | `network` changed 14 times from 2026-07-06 to 2026-08-01 (49 addresses, mostly in `152[.]32`, `101[.]36`, `128[.]14`, `43[.]133`, `172[.]232`). On 2026-08-01 every record of both names was cleared and a farewell `message` record written. On 2026-10-27 both names lost their resolver and passed to `0xda021a2c1c2f99574d861ef8c6fa745851beb7f6`, as `2busydrinkingcodeine[.]eth` did the same day |
 | DVR bot, July | `meower[.]eth`; Solana names `roanoke[.]sol`, `telnet[.]sol`; loader `deformed[.]su:9018`, `nvms9000[.]online` in the binary | 2026-07-17 `172[.]233[.]124[.]230`, `45[.]154[.]98[.]115`, telnet record `205[.]237[.]110[.]232`; since 2026-07-24 the records read `I took it down now im sorry` and `no more botnet` |
-| Drunkasfk | `2busydrinkingcodeine[.]eth` (plain in the August builds, hidden later) | registered 2026-07-29; 157 updates 2026-07-30 to 2026-10-26; resolver cleared and the name transferred on 2026-10-27, so these bots no longer resolve |
+| Drunkasfk | `2busydrinkingcodeine[.]eth`, plain in the first August builds and in an encrypted table afterwards | registered 2026-07-29; 157 values from 2026-07-30 to 2026-10-26, 304 distinct addresses, up to 20 per value. They overlap the DVR bot's ranges (`77[.]232`, `91[.]142`, `172[.]233`, `185[.]244`), so this is the same operator's next bot. Last value, 2026-10-26, twenty addresses including `178[.]128[.]223[.]92`, `43[.]159[.]46[.]155`, `43[.]156[.]101[.]228`, `164[.]92[.]166[.]123`, `68[.]183[.]183[.]60`. Resolver cleared and the name transferred on 2026-10-27, so these bots no longer resolve |
 | Kimwolf | `pawsatyou[.]eth`; in the binary `176[.]65[.]139[.]210`, `65[.]109[.]18[.]44`, `report[.]kimwolf[.]net` | the address record holds the owner's own wallet, which decodes to no real server |
 | Vibenet | `fuckmepls[.]eth` | 2026-08-24 `201[.]7[.]23[.]8`, `.9`; 2026-09-01 adds `.254`, `.255`; 2026-09-15 `217[.]60[.]242[.]252`, `.253`; 2026-10-03 adds `.79`, `.80` |
 
