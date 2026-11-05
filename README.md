@@ -15,7 +15,7 @@ Rules are organised by malware class, then family: `<class>/<family>/<rule>.yar`
 | Class | Families |
 |---|---|
 | `backdoors/` | Destover (Lazarus wiper, 2014), Factory-v3 Go implant |
-| `botnets/` | Chaos/Kaiji Ares variant, Diicot (Mexals) shc-compiled installers and their miner and SSH brute-force scripts, Kaiji-like Go ELF, Mirai-like stage-1 clusters, Mozi P2P bot and its tampered UPX packing |
+| `botnets/` | Chaos/Kaiji Ares variant, Diicot (Mexals) shc-compiled installers and their miner and SSH brute-force scripts, Kaiji-like Go ELF, Mirai-like stage-1 clusters, Mozi P2P bot and its tampered UPX packing, Linux bots that keep their C2 on a blockchain (`chain_c2/`: Boatnet, Kimwolf and Mirai forks reading Polygon contracts or ENS records) |
 | `hvnc/` | StudioSecGhost hidden-VNC agent |
 | `injectors/` | PoolParty thread-pool injection patterns |
 | `loaders/` | Moonshine loader (in `animateclipper/`, with the AnimateClipper Go dropper), FUD Crypt (test payload, VerShadow), GuLoader NSIS installer and dropped padding, GCleaner*, SmokeLoader* |
