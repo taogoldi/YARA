@@ -1,8 +1,8 @@
 # Linux bots that keep their C2 on a blockchain
 
-Thirteen rules (2026-11-05) for Linux bots that do not carry a usable C2 address. Each one asks a public JSON-RPC
-endpoint for a value its operator can change at will: a smart contract's storage on Polygon, or a record of an
-Ethereum Name Service (ENS) name. Taking down a server does not help, because the operator writes a new address to
+Sixteen rules (2026-11-05) for Linux and Android bots that look their C2 address up on a blockchain. Most of them
+ask a public JSON-RPC endpoint for a value the operator can change at will: a smart contract's storage on Polygon,
+a record of an Ethereum Name Service (ENS) name, or the records of an Unstoppable Domains name on Base. Taking down a server does not help, because the operator writes a new address to
 the chain and every bot picks it up. A sandbox with no route out never sees the C2 either; it only sees the lookups.
 
 All of these build the `eth_call` request by hand, with a format string or by concatenation, which is what the rules key on.
@@ -20,6 +20,9 @@ All of these build the `eth_call` request by hand, with a format string or by co
 | `Linux_Mirai_ENS_Drunkasfk_C2_Resolver` | `mirai_ens_c2_resolvers.yar` | Build marker `drunkasfk`: request built by concatenation, ENS text record `woah` |
 | `Linux_Earnify_ENS_Announcement_C2_Resolver` | `earnify_ens_c2.yar` | Earnify, a Rust bot presented as a bandwidth-sharing client and Android SDK: ENS text record `proof` holding a ChaCha20-Poly1305 encrypted server announcement |
 | `Linux_Kimwolf_ENS_Addr_C2_Resolver` | `kimwolf_ens_c2.yar` | Kimwolf: ENS address record, last four bytes XOR `93 14 17 15` = IPv4; strings in a per-entry xorshift table |
+| `Android_GbcBot_ENS_ChaCha_C2_Resolver` | `gbcbot_ens_c2.yar` | GbcBot (a name given here; no public family name): native Android TV bot shipped as `libgbc.so` in the APK `com.android.shop`. ENS text record `srvgame`, a ChaCha20-encrypted address list; strings in an RC4 table |
+| `Linux_Mirai_UNS_IPFS_C2_Resolver` | `mirai_uns_ipfs_c2.yar` | Mirai fork that asks the Unstoppable Domains reader contract on Base for a domain's IPFS records and fetches `ips.txt` under that content id from a public IPFS gateway |
+| `Linux_IEM_Bot_Encrypted_Config_ENS_Capable` | `iem_bot_config.yar` | Bot with build tags `IEM-<date>-v1`: C2 hosts in a ChaCha20-encrypted key=value config; a host ending in `.eth` would go through an ENS gateway, the builds seen name dynamic-DNS hosts |
 | `SUSP_ELF_ENS_Registry_Lookup` | `mirai_ens_c2_resolvers.yar` | Heuristic: small ELF with an `eth_call` request and either the ENS registry address plus the `resolver(bytes32)` selector, or the ENS public resolver address |
 | `SUSP_ELF_EthCall_C2_Resolver` | `susp_elf_eth_call_c2.yar` | Heuristic: any ELF under 10 MB with a hand-built `eth_call` request |
 
@@ -59,7 +62,10 @@ ciphertext of the name the earlier builds showed, XORed with that name, is the k
 | ip records | Ethereum | `text(node, "ip")` .. `"ip14"` | the two halves of the dotted quad are swapped: record `C.D.A.B` is host `A.B.C.D`. The bot does the same to the A records of its fallback domains |
 | Earnify | Ethereum | `text(node, "proof")` | base64 of nonce (12) + ChaCha20-Poly1305 ciphertext + tag, key a 32-character phrase in the binary; the plaintext lists servers, a version, update URLs and hashes per platform as length-prefixed strings |
 | rustobot (one sample, read by hand) | Ethereum | `text(node, "wog")` | none |
-| Kimwolf | Ethereum | `addr(node)` | last 4 bytes XOR `93 14 17 15` |
+| Kimwolf | Ethereum | `addr(node)` | last 4 bytes XOR `93 14 17 15`. Table entry `i` is XORed with a xorshift stream seeded `(i * 0x9E3779B9) ^ seed`; the seed is `0x98BC3E80` in the builds up to September 2026 and `0xD2E9E190` in one of 2026-10-26 |
+| GbcBot | Ethereum | `text(node, "srvgame")` | hex of nonce (12) + ChaCha20 ciphertext, counter 0. Key = keccak256(`ens_ips_v1` + K), where K is two 32-byte table entries XORed together (`10c97d5c b1467f3f f5911f3d 7d944966 edef851b 6b262579 db99efbb caf8eb5b`). Plaintext: a comma-separated IPv4 list. The string table is RC4 from a fresh state per entry, key `6e 79 76 66 65 25 a9 76 39 77 7d 2d 7f 30 31 77` |
+| UNS / IPFS fork | Base | `getMany(["dweb.ipfs.hash", "ipfs.html.value"], tokenId)` on the ProxyReader, selector `0x1bd8cc1a`; then `GET /ipfs/<cid>/ips.txt` | none: the file is a plain address list. In the one build seen the request's array offsets are `0x60` and `0xa0` where `0x40` and `0x80` belong, so the contract reverts and the bot is left with the address in its own Mirai table (single-byte XOR `0x22`) |
+| IEM bot | none used | config block beside the key list (`cnc_hosts`, `cnc_port`, `doh1`..`doh3`, `ens_gateways`, ...) | ChaCha20, counter 0; the 32-byte key and 12-byte nonce are stored next to the ciphertext, before it (ARM, PowerPC) or after it (MIPS). Plaintext: `key=value` lines |
 | DVR bot, March | Ethereum | `text(node, "k1er4n")`, asked of the public resolver | `2001:db8:AABB:CCDD::1`, the four bytes XOR `0xA5` |
 | DVR bot, late March to May | Ethereum | `text(node, "ipv6")` | a list of such entries separated by a vertical bar, bytes XOR `0xA5`; the bot picks one at random |
 | DVR bot, May to July | Ethereum, Solana | `text(node, "network")`; from July also `text(node, "node")`, an address asked for a node list | the same entries, each byte nibble-swapped, rotated right by its index plus one, then XORed with and added to the matching byte of `0x80408454` |
@@ -85,6 +91,9 @@ ciphertext of the name the earlier builds showed, XORed with that name, is the k
 | Earnify | `russianaltushkawantsdickinside[.]eth`; updates under `earnify[.]su`, earlier `empty-violet-63e1[.]maskify[.]workers[.]dev` | 39 announcements since 2026-04-05, all under one key. Servers: `84[.]21[.]189[.]244:4433` (2026-04-05), `158[.]94[.]208[.]131:4433` (2026-04-06 to 08-07), `62[.]60[.]226[.]74:7777` (from 2026-08-28, current) |
 | rustobot | `rustobot[.]eth` | `93[.]152[.]221[.]110`, set once on 2026-09-07 |
 | Kimwolf | `pawsatyou[.]eth`; in the binary `176[.]65[.]139[.]210`, `65[.]109[.]18[.]44`, `report[.]kimwolf[.]net` | the address record holds the owner's own wallet, which decodes to no real server |
+| GbcBot | `libservice[.]eth` (owner `0x4f7b29ea37f5edd079808ecde4c19ebf5a5146d2`); in the binary `essencedrive[.]su` and `rolledright[.]su` (resolved when the record gives nothing), `138[.]124[.]68[.]102` (last resort), `riseofabyss[.]com`, `176[.]65[.]149[.]25`, `stun[.]kamru[.]ru` | The name's first records were plain: `o1` 2026-02-11 `194[.]87[.]25[.]136`, 02-16 `166[.]1[.]60[.]74`, moved to `ip` on 02-18. From 02-21 to 03-21 encrypted `config` and `proxy` records (not decoded; no build in the set reads them). `srvgame` from 2026-03-21: `138[.]124[.]31[.]80`; `194[.]104[.]9[.]203`; then six addresses including `138[.]124[.]68[.]102`, `45[.]148[.]125[.]131`, `166[.]1[.]60[.]151`; 03-23 `194[.]104[.]9[.]203`, `194[.]226[.]121[.]96`, `5[.]39[.]249[.]12`; since 2026-03-24 `193[.]68[.]88[.]137`, `193[.]168[.]197[.]180`, `166[.]1[.]160[.]196`, `194[.]104[.]9[.]203` (current) |
+| UNS / IPFS fork | Unstoppable domain `1337[.]xec` on Base, reader `0x78c4b414e1abdf0de267deda01dffd4cd0817a16`, token `0xc6262d31b3bd8b710779f1fb27ed4652c8d1e0afdf70e0b4f3dd6bab8b8e43cb`, owner `0x41970dd27806708604d0fb75fac5650fd98748a9` | `ipfs.html.value` = `bafybeic3zwyjwbqgwnew7zubura5h3bbkbpiof7vfy43l5jdbeqqizk32y`; its `ips.txt` holds `47[.]245[.]109[.]122`, the address the bot also carries |
+| IEM bot | `ewqqwt2[.]duckdns[.]org`, `ewqqwt[.]duckdns[.]org`, port 43833 | neither name resolves on 2026-11-05 |
 | Vibenet | `fuckmepls[.]eth` | 2026-08-24 `201[.]7[.]23[.]8`, `.9`; 2026-09-01 adds `.254`, `.255`; 2026-09-15 `217[.]60[.]242[.]252`, `.253`; 2026-10-03 adds `.79`, `.80` |
 
 All live names resolve through the ENS public resolver `0xF29100983E058b709F3D539b0c765937B804AC15`.
@@ -93,10 +102,10 @@ All live names resolve through the ENS public resolver `0xF29100983E058b709F3D53
 
 | Set | Result |
 |---|---|
-| Malware corpus, text search for `"method":"eth_call"` over 457,428 files: 413 ELF | Named by a family rule: 403 (Boatnet 67, Akuma 28, Ouroboros 72, RC4 text record 17, proxy.ips 9, ip records 12, DVR bot March to July 57, DVR bot July-August 62, Drunkasfk 47, Earnify 21, Kimwolf 11). All 413 matched `SUSP_ELF_EthCall_C2_Resolver`; 202 matched `SUSP_ELF_ENS_Registry_Lookup` |
-| Same search, the 10 ELF matched by the heuristics only | Vibenet (1), rustobot (1), a larger Rust bot whose configuration was not recovered (2), six others |
-| Benign software set (49,633 files) | 0 matched, all thirteen rules |
-| Clean ELF: a benign software set (14,698) and a Debian system image (1,603) | 0 matched, all thirteen rules |
+| Malware corpus, text search for `"method":"eth_call"` over 457,428 files: 413 ELF | Named by a family rule: 409 (Boatnet 67, Akuma 28, Ouroboros 72, RC4 text record 17, proxy.ips 9, ip records 12, DVR bot March to July 57, DVR bot July-August 62, Drunkasfk 47, Earnify 21, Kimwolf 11, IEM bot 3, GbcBot 2, UNS / IPFS fork 1). All 413 matched `SUSP_ELF_EthCall_C2_Resolver`; 202 matched `SUSP_ELF_ENS_Registry_Lookup` |
+| Same search, the 4 ELF matched by the heuristics only | Vibenet (1), rustobot (1), a larger Rust bot whose configuration was not recovered (2) |
+| Benign software set (49,633 files) | 0 matched, all sixteen rules |
+| Clean ELF: a benign software set (14,698) and a Debian system image (1,603) | 0 matched, all sixteen rules |
 
 Bazaar labels most of these samples Mirai, including Boatnet. UPX-packed copies match after unpacking only.
 
@@ -114,4 +123,8 @@ Reference samples:
 - Earnify: `37bdcdb26c04c38ee4c123fd986dc0f8c0449fc8456fe25dd7f4fd9d0a1c8d7f` (plain strings), `a4e560c61861c4c3d6d614217d93f38fadea8ee6b127ccd85618ff4312582600` (masked strings)
 - rustobot: `21a58deb2557cb9cf07a673820239b0577be33f0bd0f2ddb7e61a0f16003e8dc`
 - Kimwolf: `25418594755f57298e0f0c81a91205c28c0af91709af755e919d4b896ccce212`
+- Kimwolf, second seed: `4dc34b240a972474b036fa7813f1db6331c84909ad2d2eb345239e2f8919bf1f`
+- GbcBot: `78b84e2f2f9cd28afda5d5687b91e63b68b8252311c19104b4c79f646f2ab19e` (ARM), `1ea03e6f674a0d870a3a15b7dae589266436cff7bd900049d34fa58cacf48370` (ARM64), both `libgbc.so` from the APK `e7e8d69ea8ecab221f713879fe441f4c8a19501b0089aa97bc0c348df88efdda`
+- UNS / IPFS fork: `8388d1a320874a8399e134f8304966a369a7322c590adbcadb4f90a24c32fb41`
+- IEM bot: `c1c9c2e2936bf0492c896647531f6212d9271f1881c8b95d692d4aee48b4d472` (ARM), `7607a6631a90eb57ad892bb0cca2bd6618940822daed745392676f6aec4a33f4` (MIPS), `23315993c5c7df358f6d9082d74d72774b613310ebafd0272f5efdf04d3ce9a6` (PowerPC)
 - Vibenet: `5002282edb86e86fd7d7eedd8b3bd2444390eec0d18e93641d23c89cdba1f9ef`
