@@ -17,7 +17,7 @@ rule AUTO_rhadamanthys_b_v5 {
       validation_other_family_hits = 0
       validation_heldout_hits = "2 of 60"
       live_precision = "1.00 over 3 matches"
-      live_measured = "2026-11-10"
+      live_measured = "2026-11-11"
       hash1 = "a19462aa4e4ef8ac23ee40366abae865b40501536c09c4efbb91c8418df1fd7a"
       hash2 = "6f195a84e2f8367b5114cac32c94d0e5d12972cb2c88d66d5e8a1090fe899297"
       hash3 = "dcb1a54c2608095a7d9785246efb7f5b6c5805ed6a77c11f0910d87c21c97914"
