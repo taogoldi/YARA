@@ -16,6 +16,8 @@ rule AUTO_guloader_a_v11 {
       validation_other_families = 337
       validation_other_family_hits = 0
       validation_heldout_hits = "4 of 60"
+      live_precision = "1.00 over 2 matches"
+      live_measured = "2026-11-11"
       hash1 = "fc72839f0b784c29f9e6ed22944f622ba6498c1f9b9aaf59aa125ace2db6e802"
       hash2 = "4fba78d5861a3d27b31a489a733da507646727f665999aa06336ed53dac5a687"
       hash3 = "10b13048b3765fdacc9108982f2ccbc6a065e2c78efa8c0299179f7547c49f64"
