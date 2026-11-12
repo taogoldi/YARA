@@ -15,6 +15,8 @@ rule AUTO_remusstealer_a_v1 {
       validation_other_families = 329
       validation_other_family_hits = 0
       validation_heldout_hits = "6 of 60"
+      live_precision = "1.00 over 7 matches"
+      live_measured = "2026-11-12"
       hash1 = "05c605c364c2465d765d7e4bd0d80459b2d230491399ffbb2a9085891531498f"
       hash2 = "43597d2ca1d3a75adb96086a4e8758dbaac72ca51dee68abe63d842a4b5dd3a6"
       hash3 = "b5863ca0b91aa7f34c32686103b5a8ef1ea9224cdb848a66b71e933e97253499"
