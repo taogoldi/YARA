@@ -16,8 +16,8 @@ rule AUTO_amadey_b_v2 {
       validation_other_families = 344
       validation_other_family_hits = 0
       validation_heldout_hits = "2 of 60"
-      live_precision = "0.98 over 41 matches"
-      live_measured = "2026-11-11"
+      live_precision = "0.95 over 45 matches"
+      live_measured = "2026-11-12"
       hash1 = "a5f577a4efb54b5642cdc079aa4d3906ae79d0b2543b83dd3c2e312775caa2af"
       hash2 = "78eda3158bc47d7d0982c476486b12faaf6e46195e0bfc457c8ed43690f0de82"
       hash3 = "221e2c855e78d5cc7fb84738effb88bb11a47be6ce10530c909534e15f47e0b4"
