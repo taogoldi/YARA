@@ -16,6 +16,8 @@ rule AUTO_masslogger_a_v6 {
       validation_other_families = 339
       validation_other_family_hits = 0
       validation_heldout_hits = "4 of 60"
+      live_precision = "1.00 over 1 matches"
+      live_measured = "2026-11-13"
       hash1 = "e5cb4ec57b849e56cd6070388968d5eec2e0a8f1149d41cca2ab9463eb1ca931"
       hash2 = "65386f7569aa2948f2f15e780c8cff3cd01fee3865bb92a1fd54a02b8a8c1175"
       hash3 = "dd09be82abbdebe05d7531fd1113727857b11374801dfcb98019f725651130ca"
