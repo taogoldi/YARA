@@ -16,8 +16,8 @@ rule AUTO_agenttesla_a_v9 {
       validation_other_families = 377
       validation_other_family_hits = 0
       validation_heldout_hits = "7 of 60"
-      live_precision = "1.00 over 34 matches"
-      live_measured = "2026-11-24"
+      live_precision = "0.98 over 70 matches"
+      live_measured = "2026-11-26"
       hash1 = "a2909324ee9763d9c6b48ed73d2bb082d622eebd35d22641da2894d9cf94cea9"
       hash2 = "fb495efe6d76194abc19fea6499c3d8f70cee6912b024676da2058bda8cb8322"
       hash3 = "dce04b626574c990b7a1d873006c10a7f3fdfca21f63660e36a9e681f588825f"
